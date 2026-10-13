@@ -7,64 +7,131 @@
  */
 ?>
 
-<div class="row">
+<div class="form-page">
 
-    <aside class="column">
-        <div class="side-nav">
+    <div class="form-header">
 
-            <h4 class="heading"><?= __('Acciones') ?></h4>
+        <div>
+
+            <div class="form-kicker">
+                Registro de anotaciones
+            </div>
+
+            <h1>
+                Registrar goles
+            </h1>
+
+            <p>
+                Registra la cantidad de goles anotados por un jugador en una jornada.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="form-card">
+
+        <div class="form-card-top">
+
+            <h3>
+                Información de anotación
+            </h3>
+
+            <p>
+                Selecciona jugador, jornada y cantidad de goles.
+            </p>
+
+        </div>
+
+
+        <?= $this->Form->create($gole) ?>
+
+
+        <div class="form-card-body">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <?= $this->Form->control(
+                        'jugador_id',
+                        [
+                            'label' => 'Jugador',
+                            'options' => $jugadors,
+                            'empty' => 'Seleccione un jugador'
+                        ]
+                    ) ?>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <?= $this->Form->control(
+                        'jornada_id',
+                        [
+                            'label' => 'Jornada',
+                            'options' => $jornadas,
+                            'empty' => 'Seleccione una jornada'
+                        ]
+                    ) ?>
+
+                </div>
+
+
+                <div class="form-group full-width">
+
+                    <?= $this->Form->control(
+                        'cantidad',
+                        [
+                            'label' => 'Cantidad de goles',
+                            'type' => 'number',
+                            'min' => 0,
+                            'step' => 1,
+                            'placeholder' => 'Ejemplo: 2'
+                        ]
+                    ) ?>
+
+                    <span class="form-help">
+                        Ingresa únicamente números enteros iguales o mayores a 0.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-card-footer">
 
             <?= $this->Html->link(
-                __('Lista de goles'),
-                ['action' => 'index'],
-                ['class' => 'side-nav-item']
+                '← Volver a goles',
+                [
+                    'action' => 'index'
+                ],
+                [
+                    'class' => 'form-secondary-button'
+                ]
             ) ?>
 
-        </div>
-    </aside>
 
-    <div class="column column-80">
+            <div class="form-actions">
 
-        <div class="goles form content">
+                <?= $this->Form->button(
+                    'Guardar goles',
+                    [
+                        'class' => 'button'
+                    ]
+                ) ?>
 
-            <?= $this->Form->create($gole) ?>
-
-            <fieldset>
-
-                <legend><?= __('Registrar Goles') ?></legend>
-
-                <?php
-
-                echo $this->Form->control('jugador_id', [
-                    'options' => $jugadors,
-                    'label' => 'Jugador',
-                    'empty' => 'Seleccione un jugador'
-                ]);
-
-                echo $this->Form->control('jornada_id', [
-                    'options' => $jornadas,
-                    'label' => 'Jornada',
-                    'empty' => 'Seleccione una jornada'
-                ]);
-
-                echo $this->Form->control('cantidad', [
-                    'label' => 'Cantidad de goles',
-                    'type' => 'number',
-                    'min' => 0,
-                    'step' => 1
-                ]);
-
-                ?>
-
-            </fieldset>
-
-            <?= $this->Form->button(
-                __('Guardar goles')
-            ) ?>
-
-            <?= $this->Form->end() ?>
+            </div>
 
         </div>
+
+
+        <?= $this->Form->end() ?>
 
     </div>
 

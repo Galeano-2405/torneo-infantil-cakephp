@@ -4,24 +4,102 @@
  * @var \App\Model\Entity\Equipo $equipo
  */
 ?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('List Equipos'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+
+<div class="form-page">
+
+    <div class="form-header">
+
+        <div>
+
+            <div class="form-kicker">
+                Catálogo del torneo
+            </div>
+
+            <h1>
+                Nuevo equipo
+            </h1>
+
+            <p>
+                Registra un nuevo equipo participante del torneo.
+            </p>
+
         </div>
-    </aside>
-    <div class="column column-80">
-        <div class="equipos form content">
-            <?= $this->Form->create($equipo) ?>
-            <fieldset>
-                <legend><?= __('Add Equipo') ?></legend>
-                <?php
-                    echo $this->Form->control('nombre');
-                ?>
-            </fieldset>
-            <?= $this->Form->button(__('Submit')) ?>
-            <?= $this->Form->end() ?>
-        </div>
+
     </div>
+
+
+    <div class="form-card">
+
+        <div class="form-card-top">
+
+            <h3>
+                Información del equipo
+            </h3>
+
+            <p>
+                Completa los datos necesarios para crear el equipo.
+            </p>
+
+        </div>
+
+
+        <?= $this->Form->create($equipo) ?>
+
+
+        <div class="form-card-body">
+
+            <div class="form-grid">
+
+                <div class="form-group full-width">
+
+                    <?= $this->Form->control(
+                        'nombre',
+                        [
+                            'label' => 'Nombre del equipo',
+                            'placeholder' => 'Ejemplo: FC Barcelona'
+                        ]
+                    ) ?>
+
+                    <span class="form-help">
+                        Ingresa el nombre con el que será identificado el equipo.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-card-footer">
+
+            <?= $this->Html->link(
+                '← Volver a equipos',
+                [
+                    'action' => 'index'
+                ],
+                [
+                    'class' => 'form-secondary-button'
+                ]
+            ) ?>
+
+
+            <div class="form-actions">
+
+                <?= $this->Form->button(
+                    'Guardar equipo',
+                    [
+                        'class' => 'button'
+                    ]
+                ) ?>
+
+            </div>
+
+        </div>
+
+
+        <?= $this->Form->end() ?>
+
+    </div>
+
 </div>

@@ -4,30 +4,124 @@
  * @var \App\Model\Entity\Jornada $jornada
  */
 ?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $jornada->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $jornada->id), 'class' => 'side-nav-item']
-            ) ?>
-            <?= $this->Html->link(__('List Jornadas'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+
+<div class="form-page">
+
+    <div class="form-header">
+
+        <div>
+
+            <div class="form-kicker">
+                Actualización de jornada
+            </div>
+
+            <h1>
+                Editar jornada
+            </h1>
+
+            <p>
+                Modifica el nombre o la fecha programada de la jornada.
+            </p>
+
         </div>
-    </aside>
-    <div class="column column-80">
-        <div class="jornadas form content">
-            <?= $this->Form->create($jornada) ?>
-            <fieldset>
-                <legend><?= __('Edit Jornada') ?></legend>
-                <?php
-                    echo $this->Form->control('nombre');
-                    echo $this->Form->control('fecha');
-                ?>
-            </fieldset>
-            <?= $this->Form->button(__('Submit')) ?>
-            <?= $this->Form->end() ?>
-        </div>
+
     </div>
+
+
+    <div class="form-card">
+
+        <div class="form-card-top">
+
+            <h3>
+                Datos de la jornada
+            </h3>
+
+            <p>
+                Actualiza únicamente los campos que necesites modificar.
+            </p>
+
+        </div>
+
+
+        <?= $this->Form->create($jornada) ?>
+
+
+        <div class="form-card-body">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <?= $this->Form->control(
+                        'nombre',
+                        [
+                            'label' => 'Nombre de la jornada'
+                        ]
+                    ) ?>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <?= $this->Form->control(
+                        'fecha',
+                        [
+                            'label' => 'Fecha de la jornada'
+                        ]
+                    ) ?>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-card-footer">
+
+            <?= $this->Html->link(
+                '← Volver a jornadas',
+                [
+                    'action' => 'index'
+                ],
+                [
+                    'class' => 'form-secondary-button'
+                ]
+            ) ?>
+
+
+            <div class="form-actions">
+
+                <?= $this->Form->postLink(
+                    'Eliminar',
+                    [
+                        'action' => 'delete',
+                        $jornada->id
+                    ],
+                    [
+                        'confirm' =>
+                            '¿Está seguro de eliminar esta jornada?',
+                        'class' =>
+                            'form-danger-button'
+                    ]
+                ) ?>
+
+
+                <?= $this->Form->button(
+                    'Guardar cambios',
+                    [
+                        'class' => 'button'
+                    ]
+                ) ?>
+
+            </div>
+
+        </div>
+
+
+        <?= $this->Form->end() ?>
+
+    </div>
+
 </div>

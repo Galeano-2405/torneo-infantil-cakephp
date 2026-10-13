@@ -7,73 +7,139 @@
  */
 ?>
 
-<div class="row">
+<div class="form-page">
 
-    <aside class="column">
-        <div class="side-nav">
+    <div class="form-header">
 
-            <h4 class="heading"><?= __('Acciones') ?></h4>
+        <div>
 
-            <?= $this->Form->postLink(
-                __('Eliminar'),
-                ['action' => 'delete', $gole->id],
+            <div class="form-kicker">
+                Actualización de anotaciones
+            </div>
+
+            <h1>
+                Editar goles
+            </h1>
+
+            <p>
+                Modifica la información registrada para esta anotación.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="form-card">
+
+        <div class="form-card-top">
+
+            <h3>
+                Datos de anotación
+            </h3>
+
+            <p>
+                Actualiza únicamente los campos necesarios.
+            </p>
+
+        </div>
+
+
+        <?= $this->Form->create($gole) ?>
+
+
+        <div class="form-card-body">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <?= $this->Form->control(
+                        'jugador_id',
+                        [
+                            'label' => 'Jugador',
+                            'options' => $jugadors
+                        ]
+                    ) ?>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <?= $this->Form->control(
+                        'jornada_id',
+                        [
+                            'label' => 'Jornada',
+                            'options' => $jornadas
+                        ]
+                    ) ?>
+
+                </div>
+
+
+                <div class="form-group full-width">
+
+                    <?= $this->Form->control(
+                        'cantidad',
+                        [
+                            'label' => 'Cantidad de goles',
+                            'type' => 'number',
+                            'min' => 0,
+                            'step' => 1
+                        ]
+                    ) ?>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-card-footer">
+
+            <?= $this->Html->link(
+                '← Volver a goles',
                 [
-                    'confirm' => __('¿Está seguro de eliminar este registro de goles?'),
-                    'class' => 'side-nav-item'
+                    'action' => 'index'
+                ],
+                [
+                    'class' => 'form-secondary-button'
                 ]
             ) ?>
 
-            <?= $this->Html->link(
-                __('Lista de goles'),
-                ['action' => 'index'],
-                ['class' => 'side-nav-item']
-            ) ?>
+
+            <div class="form-actions">
+
+                <?= $this->Form->postLink(
+                    'Eliminar',
+                    [
+                        'action' => 'delete',
+                        $gole->id
+                    ],
+                    [
+                        'confirm' =>
+                            '¿Está seguro de eliminar este registro de goles?',
+                        'class' =>
+                            'form-danger-button'
+                    ]
+                ) ?>
+
+
+                <?= $this->Form->button(
+                    'Guardar cambios',
+                    [
+                        'class' => 'button'
+                    ]
+                ) ?>
+
+            </div>
 
         </div>
-    </aside>
 
-    <div class="column column-80">
 
-        <div class="goles form content">
-
-            <?= $this->Form->create($gole) ?>
-
-            <fieldset>
-
-                <legend><?= __('Editar Goles') ?></legend>
-
-                <?php
-
-                echo $this->Form->control('jugador_id', [
-                    'options' => $jugadors,
-                    'label' => 'Jugador',
-                    'empty' => 'Seleccione un jugador'
-                ]);
-
-                echo $this->Form->control('jornada_id', [
-                    'options' => $jornadas,
-                    'label' => 'Jornada',
-                    'empty' => 'Seleccione una jornada'
-                ]);
-
-                echo $this->Form->control('cantidad', [
-                    'label' => 'Cantidad de goles',
-                    'type' => 'number',
-                    'min' => 0,
-                    'step' => 1
-                ]);
-
-                ?>
-
-            </fieldset>
-
-            <?= $this->Form->button(
-                __('Guardar cambios')
-            ) ?>
-
-            <?= $this->Form->end() ?>
-
-        </div>
+        <?= $this->Form->end() ?>
 
     </div>
 
