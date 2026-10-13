@@ -1,382 +1,272 @@
 <?php
 /**
- * Dashboard principal
+ * Home premium
  *
  * @var \App\View\AppView $this
  */
 ?>
 
-<style>
-    .dashboard-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 35px 25px 60px;
-    }
+<div class="home-pro">
 
-    .dashboard-header {
-        margin-bottom: 40px;
-    }
+    <!-- HERO -->
+    <section class="hero-pro">
+        <div class="hero-pro-content">
 
-    .dashboard-header h2 {
-        margin-bottom: 8px;
-        font-size: 38px;
-        font-weight: 500;
-    }
-
-    .dashboard-header p {
-        margin: 0;
-        font-size: 18px;
-        color: #666;
-    }
-
-    .dashboard-section {
-        margin-bottom: 45px;
-    }
-
-    .dashboard-section-title {
-        margin-bottom: 20px;
-        font-size: 27px;
-        font-weight: 500;
-    }
-
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 22px;
-    }
-
-    .dashboard-card {
-        background: #ffffff;
-        border: 1px solid #dddddd;
-        border-radius: 12px;
-        padding: 26px;
-        min-height: 245px;
-
-        display: flex;
-        flex-direction: column;
-
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-
-        transition:
-            transform 0.2s ease,
-            box-shadow 0.2s ease;
-    }
-
-    .dashboard-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.10);
-    }
-
-    .dashboard-card h4 {
-        margin: 0 0 14px 0;
-        font-size: 25px;
-        font-weight: 500;
-    }
-
-    .dashboard-card p {
-        margin: 0 0 25px 0;
-        color: #5f6670;
-        line-height: 1.55;
-        font-size: 16px;
-
-        flex-grow: 1;
-    }
-
-    .dashboard-card .button {
-        align-self: flex-start;
-        margin-bottom: 0;
-        min-width: 165px;
-        text-align: center;
-    }
-
-    .reports-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    @media (max-width: 900px) {
-        .dashboard-grid,
-        .reports-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-    @media (max-width: 600px) {
-        .dashboard-container {
-            padding: 25px 15px 40px;
-        }
-
-        .dashboard-grid,
-        .reports-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .dashboard-header h2 {
-            font-size: 30px;
-        }
-
-        .dashboard-card {
-            min-height: auto;
-        }
-
-        .dashboard-card .button {
-            width: 100%;
-        }
-    }
-</style>
-
-
-<div class="dashboard-container">
-
-    <!-- ENCABEZADO -->
-
-    <div class="dashboard-header">
-
-        <h2>
-            Torneo Infantil de Fútbol
-        </h2>
-
-        <p>
-            Sistema de administración de jugadores, jornadas, goles e incidencias.
-        </p>
-
-    </div>
-
-
-    <!-- ADMINISTRACIÓN -->
-
-    <section class="dashboard-section">
-
-        <h3 class="dashboard-section-title">
-            Administración
-        </h3>
-
-        <div class="dashboard-grid">
-
-
-            <!-- EQUIPOS -->
-
-            <div class="dashboard-card">
-
-                <h4>
-                    Equipos
-                </h4>
-
-                <p>
-                    Administración del catálogo de equipos participantes.
-                </p>
-
-                <?= $this->Html->link(
-                    'Ver Equipos',
-                    [
-                        'controller' => 'Equipos',
-                        'action' => 'index'
-                    ],
-                    [
-                        'class' => 'button'
-                    ]
-                ) ?>
-
+            <div class="hero-badge">
+                ⚽ Plataforma deportiva · CakePHP
             </div>
 
+            <h1>
+                Torneo Infantil
+            </h1>
 
-            <!-- JUGADORES -->
+            <p>
+                Administra equipos, jugadores, jornadas, goles,
+                incidencias y reportes desde una plataforma moderna,
+                responsiva y lista para publicarse en hosting.
+            </p>
 
-            <div class="dashboard-card">
-
-                <h4>
-                    Jugadores
-                </h4>
-
-                <p>
-                    Registro de jugadores, fotografía y equipo participante.
-                </p>
-
+            <div class="hero-actions">
                 <?= $this->Html->link(
-                    'Ver Jugadores',
-                    [
-                        'controller' => 'Jugadores',
-                        'action' => 'index'
-                    ],
-                    [
-                        'class' => 'button'
-                    ]
+                    'Ver jugadores',
+                    ['controller' => 'Jugadores', 'action' => 'index'],
+                    ['class' => 'button']
                 ) ?>
 
-            </div>
-
-
-            <!-- JORNADAS -->
-
-            <div class="dashboard-card">
-
-                <h4>
-                    Jornadas
-                </h4>
-
-                <p>
-                    Administración de jornadas y fechas programadas del torneo.
-                </p>
-
                 <?= $this->Html->link(
-                    'Ver Jornadas',
-                    [
-                        'controller' => 'Jornadas',
-                        'action' => 'index'
-                    ],
-                    [
-                        'class' => 'button'
-                    ]
+                    'Ver reportes',
+                    ['controller' => 'Goles', 'action' => 'reporteGoleadores'],
+                    ['class' => 'button button-outline']
                 ) ?>
-
             </div>
 
+            <div class="hero-mini-stats">
+                <div class="hero-mini-card">
+                    <strong>5 módulos</strong>
+                    <span>Gestión principal</span>
+                </div>
 
-            <!-- GOLES -->
+                <div class="hero-mini-card">
+                    <strong>3 reportes</strong>
+                    <span>Consultas importantes</span>
+                </div>
 
-            <div class="dashboard-card">
-
-                <h4>
-                    Goles
-                </h4>
-
-                <p>
-                    Registro de goles anotados por jugador en cada jornada.
-                </p>
-
-                <?= $this->Html->link(
-                    'Ver Goles',
-                    [
-                        'controller' => 'Goles',
-                        'action' => 'index'
-                    ],
-                    [
-                        'class' => 'button'
-                    ]
-                ) ?>
-
+                <div class="hero-mini-card">
+                    <strong>100% responsive</strong>
+                    <span>Compatible con celular</span>
+                </div>
             </div>
-
-
-            <!-- INCIDENCIAS -->
-
-            <div class="dashboard-card">
-
-                <h4>
-                    Incidencias
-                </h4>
-
-                <p>
-                    Registro de tarjetas amarillas, rojas y fechas de suspensión.
-                </p>
-
-                <?= $this->Html->link(
-                    'Ver Incidencias',
-                    [
-                        'controller' => 'Incidencias',
-                        'action' => 'index'
-                    ],
-                    [
-                        'class' => 'button'
-                    ]
-                ) ?>
-
-            </div>
-
         </div>
-
     </section>
 
-
-    <!-- REPORTES -->
-
-    <section class="dashboard-section">
-
-        <h3 class="dashboard-section-title">
-            Reportes
-        </h3>
-
-        <div class="dashboard-grid reports-grid">
-
-
-            <!-- GOLEADORES -->
-
-            <div class="dashboard-card">
-
-                <h4>
-                    Goleadores
-                </h4>
-
-                <p>
-                    Ranking de jugadores ordenados según el total de goles anotados.
-                </p>
-
-                <?= $this->Html->link(
-                    'Ver Reporte',
-                    [
-                        'controller' => 'Goles',
-                        'action' => 'reporteGoleadores'
-                    ],
-                    [
-                        'class' => 'button'
-                    ]
-                ) ?>
-
+    <!-- ACCESOS RÁPIDOS -->
+    <section>
+        <div class="section-header-pro">
+            <div>
+                <h2>Accesos rápidos</h2>
+                <p>Acciones principales del sistema</p>
             </div>
-
-
-            <!-- ÁRBITRO -->
-
-            <div class="dashboard-card">
-
-                <h4>
-                    Reporte para Árbitro
-                </h4>
-
-                <p>
-                    Consulta los jugadores habilitados o suspendidos por jornada.
-                </p>
-
-                <?= $this->Html->link(
-                    'Ver Reporte',
-                    [
-                        'controller' => 'Jugadores',
-                        'action' => 'reporteArbitro'
-                    ],
-                    [
-                        'class' => 'button'
-                    ]
-                ) ?>
-
-            </div>
-
-
-            <!-- INCIDENCIAS -->
-
-            <div class="dashboard-card">
-
-                <h4>
-                    Reporte de Incidencias
-                </h4>
-
-                <p>
-                    Consulta las incidencias registradas por equipo y jugador.
-                </p>
-
-                <?= $this->Html->link(
-                    'Ver Reporte',
-                    [
-                        'controller' => 'Incidencias',
-                        'action' => 'reporte'
-                    ],
-                    [
-                        'class' => 'button'
-                    ]
-                ) ?>
-
-            </div>
-
         </div>
 
+        <div class="quick-links-pro">
+
+            <?= $this->Html->link(
+                '<div class="quick-link-box">
+                    <div class="quick-link-icon">👤</div>
+                    <div class="quick-link-text">
+                        <strong>Nuevo jugador</strong>
+                        <span>Registrar un jugador</span>
+                    </div>
+                </div>',
+                ['controller' => 'Jugadores', 'action' => 'add'],
+                ['escape' => false]
+            ) ?>
+
+            <?= $this->Html->link(
+                '<div class="quick-link-box">
+                    <div class="quick-link-icon">🛡️</div>
+                    <div class="quick-link-text">
+                        <strong>Nuevo equipo</strong>
+                        <span>Registrar un equipo</span>
+                    </div>
+                </div>',
+                ['controller' => 'Equipos', 'action' => 'add'],
+                ['escape' => false]
+            ) ?>
+
+            <?= $this->Html->link(
+                '<div class="quick-link-box">
+                    <div class="quick-link-icon">⚽</div>
+                    <div class="quick-link-text">
+                        <strong>Registrar goles</strong>
+                        <span>Cargar anotaciones</span>
+                    </div>
+                </div>',
+                ['controller' => 'Goles', 'action' => 'add'],
+                ['escape' => false]
+            ) ?>
+
+            <?= $this->Html->link(
+                '<div class="quick-link-box">
+                    <div class="quick-link-icon">🟨</div>
+                    <div class="quick-link-text">
+                        <strong>Nueva incidencia</strong>
+                        <span>Registrar tarjeta</span>
+                    </div>
+                </div>',
+                ['controller' => 'Incidencias', 'action' => 'add'],
+                ['escape' => false]
+            ) ?>
+
+        </div>
+    </section>
+
+    <!-- MÓDULOS -->
+    <section>
+        <div class="section-header-pro">
+            <div>
+                <h2>Módulos principales</h2>
+                <p>Administración general del torneo</p>
+            </div>
+        </div>
+
+        <div class="grid-pro">
+
+            <article class="card-pro">
+                <div class="card-pro-icon">🛡️</div>
+                <div class="card-chip">Catálogo</div>
+                <h4>Equipos</h4>
+                <p>
+                    Administra los equipos participantes y mantén
+                    organizado el torneo.
+                </p>
+                <?= $this->Html->link(
+                    'Ver equipos',
+                    ['controller' => 'Equipos', 'action' => 'index'],
+                    ['class' => 'button']
+                ) ?>
+            </article>
+
+            <article class="card-pro">
+                <div class="card-pro-icon">👤</div>
+                <div class="card-chip">Registro</div>
+                <h4>Jugadores</h4>
+                <p>
+                    Controla datos personales, equipo asignado
+                    y fotografía de cada jugador.
+                </p>
+                <?= $this->Html->link(
+                    'Ver jugadores',
+                    ['controller' => 'Jugadores', 'action' => 'index'],
+                    ['class' => 'button']
+                ) ?>
+            </article>
+
+            <article class="card-pro">
+                <div class="card-pro-icon">📅</div>
+                <div class="card-chip">Planificación</div>
+                <h4>Jornadas</h4>
+                <p>
+                    Gestiona las fechas y organiza correctamente
+                    el desarrollo del campeonato.
+                </p>
+                <?= $this->Html->link(
+                    'Ver jornadas',
+                    ['controller' => 'Jornadas', 'action' => 'index'],
+                    ['class' => 'button']
+                ) ?>
+            </article>
+
+            <article class="card-pro">
+                <div class="card-pro-icon">⚽</div>
+                <div class="card-chip">Resultados</div>
+                <h4>Goles</h4>
+                <p>
+                    Registra anotaciones por jugador y jornada
+                    para generar estadísticas del torneo.
+                </p>
+                <?= $this->Html->link(
+                    'Ver goles',
+                    ['controller' => 'Goles', 'action' => 'index'],
+                    ['class' => 'button']
+                ) ?>
+            </article>
+
+            <article class="card-pro">
+                <div class="card-pro-icon">🟥</div>
+                <div class="card-chip">Control disciplinario</div>
+                <h4>Incidencias</h4>
+                <p>
+                    Administra tarjetas amarillas, rojas
+                    y fechas de suspensión.
+                </p>
+                <?= $this->Html->link(
+                    'Ver incidencias',
+                    ['controller' => 'Incidencias', 'action' => 'index'],
+                    ['class' => 'button']
+                ) ?>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- REPORTES -->
+    <section>
+        <div class="section-header-pro">
+            <div>
+                <h2>Reportes</h2>
+                <p>Consultas clave para control del torneo</p>
+            </div>
+        </div>
+
+        <div class="grid-pro">
+
+            <article class="card-pro">
+                <div class="card-pro-icon">🏆</div>
+                <div class="card-chip">Estadística</div>
+                <h4>Reporte de goleadores</h4>
+                <p>
+                    Visualiza el ranking de goleadores del torneo
+                    según la cantidad total de anotaciones.
+                </p>
+                <?= $this->Html->link(
+                    'Ver reporte',
+                    ['controller' => 'Goles', 'action' => 'reporteGoleadores'],
+                    ['class' => 'button']
+                ) ?>
+            </article>
+
+            <article class="card-pro">
+                <div class="card-pro-icon">🧑‍⚖️</div>
+                <div class="card-chip">Control</div>
+                <h4>Reporte para árbitro</h4>
+                <p>
+                    Consulta qué jugadores están habilitados
+                    o suspendidos según la jornada seleccionada.
+                </p>
+                <?= $this->Html->link(
+                    'Ver reporte',
+                    ['controller' => 'Jugadores', 'action' => 'reporteArbitro'],
+                    ['class' => 'button']
+                ) ?>
+            </article>
+
+            <article class="card-pro">
+                <div class="card-pro-icon">📋</div>
+                <div class="card-chip">Seguimiento</div>
+                <h4>Reporte de incidencias</h4>
+                <p>
+                    Revisa el historial de faltas, tarjetas
+                    e información disciplinaria de jugadores.
+                </p>
+                <?= $this->Html->link(
+                    'Ver reporte',
+                    ['controller' => 'Incidencias', 'action' => 'reporte'],
+                    ['class' => 'button']
+                ) ?>
+            </article>
+
+        </div>
     </section>
 
 </div>

@@ -6,136 +6,171 @@
  */
 ?>
 
-<div class="row">
+<div class="form-page">
 
-    <aside class="column">
-        <div class="side-nav">
+    <div class="form-header">
 
-            <h4 class="heading"><?= __('Acciones') ?></h4>
+        <div>
 
-            <?= $this->Form->postLink(
-                __('Eliminar'),
-                ['action' => 'delete', $incidencia->id],
-                [
-                    'confirm' => __('¿Está seguro de eliminar esta incidencia?'),
-                    'class' => 'side-nav-item'
-                ]
-            ) ?>
+            <div class="form-kicker">
+                Actualización disciplinaria
+            </div>
 
-            <?= $this->Html->link(
-                __('Lista de incidencias'),
-                ['action' => 'index'],
-                ['class' => 'side-nav-item']
-            ) ?>
+            <h1>
+                Editar incidencia
+            </h1>
 
-        </div>
-    </aside>
-
-    <div class="column column-80">
-
-        <div class="incidencias form content">
-
-            <?= $this->Form->create($incidencia) ?>
-
-            <fieldset>
-
-                <legend><?= __('Editar Incidencia') ?></legend>
-
-                <?php
-
-                echo $this->Form->control('jugador_id', [
-                    'options' => $jugadors,
-                    'label' => 'Jugador',
-                    'empty' => 'Seleccione un jugador'
-                ]);
-
-                echo $this->Form->control('descripcion', [
-                    'label' => 'Descripción',
-                    'type' => 'textarea',
-                    'rows' => 3
-                ]);
-
-                echo $this->Form->control('tipo_tarjeta', [
-                    'label' => 'Tipo de tarjeta',
-                    'type' => 'select',
-                    'options' => [
-                        'Amarilla' => 'Amarilla',
-                        'Roja' => 'Roja'
-                    ],
-                    'empty' => 'Seleccione el tipo de tarjeta',
-                    'id' => 'tipo-tarjeta'
-                ]);
-
-                echo $this->Form->control('fecha_incidencia', [
-                    'label' => 'Fecha de incidencia'
-                ]);
-
-                ?>
-
-                <div id="contenedor-suspension">
-
-                    <?= $this->Form->control(
-                        'fecha_suspension',
-                        [
-                            'label' => 'Fecha de suspensión',
-                            'empty' => true,
-                            'required' => false,
-                            'id' => 'fecha-suspension'
-                        ]
-                    ) ?>
-
-                </div>
-
-            </fieldset>
-
-            <?= $this->Form->button(
-                __('Guardar cambios')
-            ) ?>
-
-            <?= $this->Form->end() ?>
+            <p>
+                Modifica la información registrada de la incidencia.
+            </p>
 
         </div>
 
     </div>
 
+
+    <div class="form-card">
+
+        <div class="form-card-top">
+
+            <h3>
+                Datos de la incidencia
+            </h3>
+
+            <p>
+                Actualiza únicamente los campos que necesites modificar.
+            </p>
+
+        </div>
+
+
+        <?= $this->Form->create($incidencia) ?>
+
+
+        <div class="form-card-body">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <?= $this->Form->control(
+                        'jugador_id',
+                        [
+                            'label' => 'Jugador',
+                            'options' => $jugadors
+                        ]
+                    ) ?>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <?= $this->Form->control(
+                        'tipo_tarjeta',
+                        [
+                            'label' => 'Tipo de tarjeta',
+                            'type' => 'select',
+                            'options' => [
+                                'Amarilla' => '🟨 Amarilla',
+                                'Roja' => '🟥 Roja'
+                            ]
+                        ]
+                    ) ?>
+
+                </div>
+
+
+                <div class="form-group full-width">
+
+                    <?= $this->Form->control(
+                        'descripcion',
+                        [
+                            'label' => 'Descripción',
+                            'type' => 'textarea'
+                        ]
+                    ) ?>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <?= $this->Form->control(
+                        'fecha_incidencia',
+                        [
+                            'label' => 'Fecha de incidencia'
+                        ]
+                    ) ?>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <?= $this->Form->control(
+                        'fecha_suspension',
+                        [
+                            'label' => 'Fecha de suspensión',
+                            'empty' => true
+                        ]
+                    ) ?>
+
+                    <span class="form-help">
+                        Déjalo vacío si la incidencia no implica suspensión.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-card-footer">
+
+            <?= $this->Html->link(
+                '← Volver a incidencias',
+                [
+                    'action' => 'index'
+                ],
+                [
+                    'class' => 'form-secondary-button'
+                ]
+            ) ?>
+
+
+            <div class="form-actions">
+
+                <?= $this->Form->postLink(
+                    'Eliminar',
+                    [
+                        'action' => 'delete',
+                        $incidencia->id
+                    ],
+                    [
+                        'confirm' =>
+                            '¿Está seguro de eliminar esta incidencia?',
+                        'class' =>
+                            'form-danger-button'
+                    ]
+                ) ?>
+
+
+                <?= $this->Form->button(
+                    'Guardar cambios',
+                    [
+                        'class' => 'button'
+                    ]
+                ) ?>
+
+            </div>
+
+        </div>
+
+
+        <?= $this->Form->end() ?>
+
+    </div>
+
 </div>
-
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    const tipoTarjeta =
-        document.getElementById('tipo-tarjeta');
-
-    const fechaSuspension =
-        document.getElementById('fecha-suspension');
-
-    const contenedorSuspension =
-        document.getElementById('contenedor-suspension');
-
-    function actualizarSuspension() {
-
-        if (tipoTarjeta.value === 'Roja') {
-
-            contenedorSuspension.style.display = 'block';
-
-            fechaSuspension.required = true;
-
-        } else {
-
-            contenedorSuspension.style.display = 'none';
-
-            fechaSuspension.required = false;
-
-            fechaSuspension.value = '';
-        }
-    }
-
-    tipoTarjeta.addEventListener(
-        'change',
-        actualizarSuspension
-    );
-
-    actualizarSuspension();
-});
-</script>

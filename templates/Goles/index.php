@@ -4,56 +4,488 @@
  * @var iterable<\App\Model\Entity\Gole> $goles
  */
 ?>
-<div class="goles index content">
-    <?= $this->Html->link(__('New Gole'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-    <h3><?= __('Goles') ?></h3>
-    <div class="table-responsive">
-        <table>
-            <thead>
-                <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('jugador_id') ?></th>
-                    <th><?= $this->Paginator->sort('jornada_id') ?></th>
-                    <th><?= $this->Paginator->sort('cantidad') ?></th>
-                    <th><?= $this->Paginator->sort('created') ?></th>
-                    <th><?= $this->Paginator->sort('modified') ?></th>
-                    <th class="actions"><?= __('Actions') ?></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($goles as $gole): ?>
-                <tr>
-                    <td><?= $this->Number->format($gole->id) ?></td>
-                    <td><?= $gole->hasValue('jugador') ? $this->Html->link($gole->jugador->nombres, ['controller' => 'Jugadores', 'action' => 'view', $gole->jugador->id]) : '' ?></td>
-                    <td><?= $gole->hasValue('jornada') ? $this->Html->link($gole->jornada->nombre, ['controller' => 'Jornadas', 'action' => 'view', $gole->jornada->id]) : '' ?></td>
-                    <td><?= $this->Number->format($gole->cantidad) ?></td>
-                    <td><?= h($gole->created) ?></td>
-                    <td><?= h($gole->modified) ?></td>
-                    <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $gole->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $gole->id]) ?>
-                        <?= $this->Form->postLink(
-                            __('Delete'),
-                            ['action' => 'delete', $gole->id],
+
+<div class="goals-page">
+
+    <!-- HEADER -->
+    <div class="goals-header">
+
+        <div>
+            <div class="goals-kicker">
+                Registro de anotaciones
+            </div>
+
+            <h1>
+                Goles
+            </h1>
+
+            <p>
+                Administra los goles anotados por jugador y jornada.
+            </p>
+        </div>
+
+        <div class="goals-header-actions">
+
+            <?= $this->Html->link(
+                '＋ Registrar goles',
+                [
+                    'controller' => 'Goles',
+                    'action' => 'add'
+                ],
+                [
+                    'class' => 'button'
+                ]
+            ) ?>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESUMEN -->
+    <div class="goals-summary">
+
+        <div class="goals-summary-card">
+
+            <div class="goals-summary-icon">
+                ⚽
+            </div>
+
+            <div>
+                <strong>
+                    <?= count($goles) ?>
+                </strong>
+
+                <span>
+                    Registros mostrados
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLA -->
+    <div class="goals-table-card">
+
+        <div class="goals-table-top">
+
+            <div>
+                <h3>
+                    Historial de goles
+                </h3>
+
+                <p>
+                    Registro de anotaciones por jugador y jornada.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive goals-desktop-table">
+
+            <table class="goals-table">
+
+                <thead>
+                    <tr>
+                        <th>Jugador</th>
+                        <th>Jornada</th>
+                        <th>Goles</th>
+                        <th>Registro</th>
+                        <th class="goals-actions-column">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <?php foreach ($goles as $gole): ?>
+
+                        <tr>
+
+                            <!-- JUGADOR -->
+                            <td>
+
+                                <div class="goal-player-cell">
+
+                                    <div class="goal-player-avatar">
+
+                                        <?php if (
+                                            !empty(
+                                                $gole
+                                                    ->jugador
+                                                    ->fotografia
+                                            )
+                                        ): ?>
+
+                                            <?= $this->Html->image(
+                                                'jugadores/' .
+                                                $gole
+                                                    ->jugador
+                                                    ->fotografia,
+                                                [
+                                                    'alt' =>
+                                                        'Fotografía de ' .
+                                                        $gole
+                                                            ->jugador
+                                                            ->nombres
+                                                ]
+                                            ) ?>
+
+                                        <?php else: ?>
+
+                                            <span>
+                                                👤
+                                            </span>
+
+                                        <?php endif; ?>
+
+                                    </div>
+
+
+                                    <div class="goal-player-info">
+
+                                        <strong>
+                                            <?= h(
+                                                $gole
+                                                    ->jugador
+                                                    ->nombres .
+                                                ' ' .
+                                                $gole
+                                                    ->jugador
+                                                    ->apellidos
+                                            ) ?>
+                                        </strong>
+
+                                        <span>
+                                            Jugador #<?= $gole->jugador_id ?>
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- JORNADA -->
+                            <td>
+
+                                <?php if (!empty($gole->jornada)): ?>
+
+                                    <span class="journey-badge">
+                                        📅
+                                        <?= h($gole->jornada->nombre) ?>
+                                    </span>
+
+                                <?php else: ?>
+
+                                    <span class="muted-value">
+                                        Sin jornada
+                                    </span>
+
+                                <?php endif; ?>
+
+                            </td>
+
+
+                            <!-- CANTIDAD -->
+                            <td>
+
+                                <span class="goals-badge">
+
+                                    ⚽
+
+                                    <?= (int)$gole->cantidad ?>
+
+                                    <?= (int)$gole->cantidad === 1
+                                        ? 'gol'
+                                        : 'goles'
+                                    ?>
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- REGISTRO -->
+                            <td>
+
+                                <?php if (!empty($gole->created)): ?>
+
+                                    <?= h(
+                                        $gole
+                                            ->created
+                                            ->format('d/m/Y')
+                                    ) ?>
+
+                                <?php else: ?>
+
+                                    —
+
+                                <?php endif; ?>
+
+                            </td>
+
+
+                            <!-- ACCIONES -->
+                            <td>
+
+                                <div class="crud-actions">
+
+                                    <?= $this->Html->link(
+                                        '👁 Ver',
+                                        [
+                                            'action' => 'view',
+                                            $gole->id
+                                        ],
+                                        [
+                                            'class' =>
+                                                'crud-btn crud-btn-view'
+                                        ]
+                                    ) ?>
+
+
+                                    <?= $this->Html->link(
+                                        '✏️ Editar',
+                                        [
+                                            'action' => 'edit',
+                                            $gole->id
+                                        ],
+                                        [
+                                            'class' =>
+                                                'crud-btn crud-btn-edit'
+                                        ]
+                                    ) ?>
+
+
+                                    <?= $this->Form->postLink(
+                                        '🗑 Eliminar',
+                                        [
+                                            'action' => 'delete',
+                                            $gole->id
+                                        ],
+                                        [
+                                            'confirm' =>
+                                                '¿Está seguro de eliminar este registro de goles?',
+
+                                            'class' =>
+                                                'crud-btn crud-btn-delete'
+                                        ]
+                                    ) ?>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    <?php endforeach; ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- MOBILE -->
+        <div class="goals-mobile-list">
+
+            <?php foreach ($goles as $gole): ?>
+
+                <article class="goal-mobile-card">
+
+                    <div class="goal-mobile-top">
+
+                        <div class="goal-mobile-avatar">
+
+                            <?php if (
+                                !empty(
+                                    $gole
+                                        ->jugador
+                                        ->fotografia
+                                )
+                            ): ?>
+
+                                <?= $this->Html->image(
+                                    'jugadores/' .
+                                    $gole
+                                        ->jugador
+                                        ->fotografia,
+                                    [
+                                        'alt' =>
+                                            'Fotografía de ' .
+                                            $gole
+                                                ->jugador
+                                                ->nombres
+                                    ]
+                                ) ?>
+
+                            <?php else: ?>
+
+                                <span>
+                                    👤
+                                </span>
+
+                            <?php endif; ?>
+
+                        </div>
+
+
+                        <div class="goal-mobile-name">
+
+                            <span class="goal-id">
+                                Registro #<?= $gole->id ?>
+                            </span>
+
+                            <h3>
+                                <?= h(
+                                    $gole
+                                        ->jugador
+                                        ->nombres .
+                                    ' ' .
+                                    $gole
+                                        ->jugador
+                                        ->apellidos
+                                ) ?>
+                            </h3>
+
+                            <span class="goals-badge">
+
+                                ⚽
+
+                                <?= (int)$gole->cantidad ?>
+
+                                <?= (int)$gole->cantidad === 1
+                                    ? 'gol'
+                                    : 'goles'
+                                ?>
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="goal-mobile-info">
+
+                        <div>
+                            <span>
+                                Jornada
+                            </span>
+
+                            <strong>
+                                <?= !empty($gole->jornada)
+                                    ? h($gole->jornada->nombre)
+                                    : 'Sin jornada'
+                                ?>
+                            </strong>
+                        </div>
+
+
+                        <div>
+                            <span>
+                                Fecha de registro
+                            </span>
+
+                            <strong>
+                                <?= !empty($gole->created)
+                                    ? h(
+                                        $gole
+                                            ->created
+                                            ->format('d/m/Y')
+                                    )
+                                    : 'Sin fecha'
+                                ?>
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="goal-mobile-actions">
+
+                        <?= $this->Html->link(
+                            '👁 Ver',
                             [
-                                'method' => 'delete',
-                                'confirm' => __('Are you sure you want to delete # {0}?', $gole->id),
+                                'action' => 'view',
+                                $gole->id
+                            ],
+                            [
+                                'class' =>
+                                    'mobile-action mobile-view'
                             ]
                         ) ?>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+
+
+                        <?= $this->Html->link(
+                            '✏️ Editar',
+                            [
+                                'action' => 'edit',
+                                $gole->id
+                            ],
+                            [
+                                'class' =>
+                                    'mobile-action mobile-edit'
+                            ]
+                        ) ?>
+
+
+                        <?= $this->Form->postLink(
+                            '🗑 Eliminar',
+                            [
+                                'action' => 'delete',
+                                $gole->id
+                            ],
+                            [
+                                'confirm' =>
+                                    '¿Está seguro de eliminar este registro de goles?',
+
+                                'class' =>
+                                    'mobile-action mobile-delete'
+                            ]
+                        ) ?>
+
+                    </div>
+
+                </article>
+
+            <?php endforeach; ?>
+
+        </div>
+
+
+        <!-- PAGINACIÓN -->
+        <div class="goals-pagination">
+
+            <ul class="pagination">
+
+                <?= $this->Paginator->first('«') ?>
+
+                <?= $this->Paginator->prev('‹') ?>
+
+                <?= $this->Paginator->numbers() ?>
+
+                <?= $this->Paginator->next('›') ?>
+
+                <?= $this->Paginator->last('»') ?>
+
+            </ul>
+
+
+            <p>
+                <?= $this->Paginator->counter(
+                    'Página {{page}} de {{pages}} · {{current}} de {{count}} registros'
+                ) ?>
+            </p>
+
+        </div>
+
     </div>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
-    </div>
+
 </div>

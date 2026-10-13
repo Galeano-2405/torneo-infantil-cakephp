@@ -6,451 +6,574 @@
  */
 ?>
 
-<div class="row">
+<div class="player-profile-page">
 
-    <aside class="column">
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
 
-        <div class="side-nav">
+    <div class="profile-page-header">
 
-            <h4 class="heading">
-                <?= __('Acciones') ?>
-            </h4>
+        <div>
+            <div class="profile-kicker">
+                Perfil del jugador
+            </div>
 
-            <?= $this->Html->link(
-                __('Editar jugador'),
-                [
-                    'action' => 'edit',
-                    $jugadore->id
-                ],
-                [
-                    'class' => 'side-nav-item'
-                ]
-            ) ?>
-
-            <?= $this->Form->postLink(
-                __('Eliminar jugador'),
-                [
-                    'action' => 'delete',
-                    $jugadore->id
-                ],
-                [
-                    'confirm' =>
-                        __('¿Está seguro de eliminar este jugador?'),
-
-                    'class' => 'side-nav-item'
-                ]
-            ) ?>
-
-            <?= $this->Html->link(
-                __('Lista de jugadores'),
-                [
-                    'action' => 'index'
-                ],
-                [
-                    'class' => 'side-nav-item'
-                ]
-            ) ?>
-
-            <?= $this->Html->link(
-                __('Nuevo jugador'),
-                [
-                    'action' => 'add'
-                ],
-                [
-                    'class' => 'side-nav-item'
-                ]
-            ) ?>
-
-        </div>
-
-    </aside>
-
-
-    <div class="column column-80">
-
-        <div class="jugadores view content">
-
-            <h3>
+            <h1>
                 <?= h(
                     $jugadore->nombres .
                     ' ' .
                     $jugadore->apellidos
                 ) ?>
-            </h3>
+            </h1>
+
+            <p>
+                Consulta la información, goles e incidencias del jugador.
+            </p>
+        </div>
 
 
-            <!-- DATOS DEL JUGADOR -->
+        <div class="profile-header-actions">
 
-            <div style="
-                display:flex;
-                gap:30px;
-                margin-bottom:30px;
-                align-items:flex-start;
-            ">
+            <?= $this->Html->link(
+                '← Volver',
+                [
+                    'action' => 'index'
+                ],
+                [
+                    'class' => 'form-secondary-button'
+                ]
+            ) ?>
 
-                <!-- Fotografía -->
+            <?= $this->Html->link(
+                '✏️ Editar',
+                [
+                    'action' => 'edit',
+                    $jugadore->id
+                ],
+                [
+                    'class' => 'button'
+                ]
+            ) ?>
 
-                <div>
+        </div>
 
-                    <?php if (!empty($jugadore->fotografia)): ?>
+    </div>
 
-                        <?= $this->Html->image(
-                            'jugadores/' .
-                            $jugadore->fotografia,
-                            [
-                                'alt' =>
-                                    'Fotografía de ' .
-                                    $jugadore->nombres,
 
-                                'style' => '
-                                    width:200px;
-                                    height:200px;
-                                    object-fit:cover;
-                                    border-radius:12px;
-                                    border:1px solid #ddd;
-                                '
-                            ]
+    <!-- =====================================================
+         PERFIL
+         ===================================================== -->
+
+    <section class="player-profile-card">
+
+        <div class="player-profile-main">
+
+            <!-- FOTO -->
+
+            <div class="player-profile-photo">
+
+                <?php if (!empty($jugadore->fotografia)): ?>
+
+                    <?= $this->Html->image(
+                        'jugadores/' . $jugadore->fotografia,
+                        [
+                            'alt' =>
+                                'Fotografía de ' .
+                                $jugadore->nombres
+                        ]
+                    ) ?>
+
+                <?php else: ?>
+
+                    <div class="player-profile-no-photo">
+                        👤
+                    </div>
+
+                <?php endif; ?>
+
+            </div>
+
+
+            <!-- DATOS -->
+
+            <div class="player-profile-content">
+
+                <div class="player-profile-name-mobile">
+
+                    <span>
+                        Jugador #<?= $jugadore->id ?>
+                    </span>
+
+                    <h2>
+                        <?= h(
+                            $jugadore->nombres .
+                            ' ' .
+                            $jugadore->apellidos
                         ) ?>
-
-                    <?php else: ?>
-
-                        <div style="
-                            width:200px;
-                            height:200px;
-                            background:#eee;
-                            display:flex;
-                            align-items:center;
-                            justify-content:center;
-                            border-radius:12px;
-                        ">
-
-                            Sin fotografía
-
-                        </div>
-
-                    <?php endif; ?>
+                    </h2>
 
                 </div>
 
 
-                <!-- Información -->
-
-                <div style="flex:1;">
-
-                    <table>
-
-                        <tr>
-
-                            <th>
-                                Nombres
-                            </th>
-
-                            <td>
-                                <?= h($jugadore->nombres) ?>
-                            </td>
-
-                        </tr>
+                <div class="player-details-grid">
 
 
-                        <tr>
+                    <!-- NOMBRES -->
 
-                            <th>
-                                Apellidos
-                            </th>
+                    <div class="profile-detail">
 
-                            <td>
-                                <?= h($jugadore->apellidos) ?>
-                            </td>
+                        <span class="profile-detail-label">
+                            Nombres
+                        </span>
 
-                        </tr>
+                        <strong>
+                            <?= h($jugadore->nombres) ?>
+                        </strong>
 
-
-                        <tr>
-
-                            <th>
-                                Fecha de nacimiento
-                            </th>
-
-                            <td>
-
-                                <?php if (!empty($jugadore->fecha_nacimiento)): ?>
-
-                                    <?= h(
-                                        $jugadore
-                                            ->fecha_nacimiento
-                                            ->format('d/m/Y')
-                                    ) ?>
-
-                                <?php endif; ?>
-
-                            </td>
-
-                        </tr>
+                    </div>
 
 
-                        <tr>
+                    <!-- APELLIDOS -->
 
-                            <th>
-                                Equipo
-                            </th>
+                    <div class="profile-detail">
 
-                            <td>
+                        <span class="profile-detail-label">
+                            Apellidos
+                        </span>
 
-                                <?php if ($jugadore->hasValue('equipo')): ?>
+                        <strong>
+                            <?= h($jugadore->apellidos) ?>
+                        </strong>
 
-                                    <?= $this->Html->link(
-                                        $jugadore->equipo->nombre,
-                                        [
-                                            'controller' => 'Equipos',
-                                            'action' => 'view',
-                                            $jugadore->equipo->id
-                                        ]
-                                    ) ?>
-
-                                <?php else: ?>
-
-                                    Sin equipo
-
-                                <?php endif; ?>
-
-                            </td>
-
-                        </tr>
+                    </div>
 
 
-                        <tr>
+                    <!-- NACIMIENTO -->
 
-                            <th>
-                                Total de goles
-                            </th>
+                    <div class="profile-detail">
 
-                            <td>
+                        <span class="profile-detail-label">
+                            Fecha de nacimiento
+                        </span>
 
-                                <strong>
-                                    <?= h($totalGoles) ?>
-                                </strong>
+                        <strong>
 
-                            </td>
+                            <?php if (!empty($jugadore->fecha_nacimiento)): ?>
 
-                        </tr>
+                                <?= h(
+                                    $jugadore
+                                        ->fecha_nacimiento
+                                        ->format('d/m/Y')
+                                ) ?>
 
-                    </table>
+                            <?php else: ?>
+
+                                Sin fecha
+
+                            <?php endif; ?>
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- EQUIPO -->
+
+                    <div class="profile-detail">
+
+                        <span class="profile-detail-label">
+                            Equipo
+                        </span>
+
+                        <strong>
+
+                            <?php if ($jugadore->hasValue('equipo')): ?>
+
+                                <?= $this->Html->link(
+                                    $jugadore->equipo->nombre,
+                                    [
+                                        'controller' => 'Equipos',
+                                        'action' => 'view',
+                                        $jugadore->equipo->id
+                                    ],
+                                    [
+                                        'class' => 'profile-team-link'
+                                    ]
+                                ) ?>
+
+                            <?php else: ?>
+
+                                Sin equipo
+
+                            <?php endif; ?>
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- GOLES -->
+
+                    <div class="profile-detail profile-detail-goals">
+
+                        <span class="profile-detail-label">
+                            Total de goles
+                        </span>
+
+                        <strong class="profile-goals-total">
+                            ⚽ <?= h($totalGoles) ?>
+                        </strong>
+
+                    </div>
 
                 </div>
 
             </div>
 
+        </div>
 
-            <!-- HISTORIAL DE GOLES -->
+    </section>
 
-            <h4>
-                Historial de Goles
-            </h4>
 
-            <?php if (!empty($jugadore->goles)): ?>
+    <!-- =====================================================
+         HISTORIAL DE GOLES
+         ===================================================== -->
 
-                <div class="table-responsive">
+    <section class="profile-section-card">
 
-                    <table>
+        <div class="profile-section-header">
 
-                        <thead>
+            <div>
+
+                <div class="profile-section-icon">
+                    ⚽
+                </div>
+
+                <div>
+                    <h2>
+                        Historial de Goles
+                    </h2>
+
+                    <p>
+                        Anotaciones registradas por jornada.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <?php if (!empty($jugadore->goles)): ?>
+
+
+            <!-- DESKTOP -->
+
+            <div class="profile-desktop-table">
+
+                <table class="profile-table">
+
+                    <thead>
+                        <tr>
+                            <th>Jornada</th>
+                            <th>Fecha</th>
+                            <th>Goles</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <?php foreach ($jugadore->goles as $gol): ?>
 
                             <tr>
 
-                                <th>
-                                    Jornada
-                                </th>
+                                <td>
 
-                                <th>
-                                    Fecha
-                                </th>
-
-                                <th>
-                                    Goles
-                                </th>
-
-                            </tr>
-
-                        </thead>
-
-
-                        <tbody>
-
-                            <?php foreach ($jugadore->goles as $gol): ?>
-
-                                <tr>
-
-                                    <td>
-
+                                    <span class="journey-badge">
+                                        📅
                                         <?= h(
                                             $gol->jornada->nombre
                                             ?? 'Sin jornada'
                                         ) ?>
+                                    </span>
 
-                                    </td>
-
-
-                                    <td>
-
-                                        <?php if (
-                                            !empty($gol->jornada->fecha)
-                                        ): ?>
-
-                                            <?= h(
-                                                $gol
-                                                    ->jornada
-                                                    ->fecha
-                                                    ->format('d/m/Y')
-                                            ) ?>
-
-                                        <?php endif; ?>
-
-                                    </td>
+                                </td>
 
 
-                                    <td>
+                                <td>
 
-                                        <?= h($gol->cantidad) ?>
+                                    <?php if (
+                                        !empty($gol->jornada->fecha)
+                                    ): ?>
 
-                                    </td>
+                                        <?= h(
+                                            $gol
+                                                ->jornada
+                                                ->fecha
+                                                ->format('d/m/Y')
+                                        ) ?>
 
-                                </tr>
+                                    <?php else: ?>
 
-                            <?php endforeach; ?>
+                                        Sin fecha
 
-                        </tbody>
+                                    <?php endif; ?>
 
-                    </table>
-
-                </div>
-
-            <?php else: ?>
-
-                <p>
-                    El jugador todavía no tiene goles registrados.
-                </p>
-
-            <?php endif; ?>
+                                </td>
 
 
-            <!-- INCIDENCIAS -->
+                                <td>
 
-            <h4 style="margin-top:30px;">
-                Historial de Incidencias
-            </h4>
+                                    <span class="goals-badge">
 
-            <?php if (!empty($jugadore->incidencias)): ?>
+                                        ⚽ <?= h($gol->cantidad) ?>
 
-                <div class="table-responsive">
+                                        <?= (int)$gol->cantidad === 1
+                                            ? 'gol'
+                                            : 'goles'
+                                        ?>
 
-                    <table>
+                                    </span>
 
-                        <thead>
-
-                            <tr>
-
-                                <th>
-                                    Descripción
-                                </th>
-
-                                <th>
-                                    Tarjeta
-                                </th>
-
-                                <th>
-                                    Fecha
-                                </th>
-
-                                <th>
-                                    Fecha de suspensión
-                                </th>
+                                </td>
 
                             </tr>
 
-                        </thead>
+                        <?php endforeach; ?>
+
+                    </tbody>
+
+                </table>
+
+            </div>
 
 
-                        <tbody>
+            <!-- MOBILE -->
 
-                            <?php foreach (
-                                $jugadore->incidencias
-                                as $incidencia
-                            ): ?>
+            <div class="profile-mobile-history">
 
-                                <tr>
+                <?php foreach ($jugadore->goles as $gol): ?>
 
-                                    <td>
+                    <article class="history-mobile-card goal-history-card">
+
+                        <div class="history-mobile-top">
+
+                            <div class="history-mobile-icon">
+                                ⚽
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Jornada
+                                </span>
+
+                                <h3>
+                                    <?= h(
+                                        $gol->jornada->nombre
+                                        ?? 'Sin jornada'
+                                    ) ?>
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="history-mobile-grid">
+
+                            <div>
+
+                                <span>
+                                    Fecha
+                                </span>
+
+                                <strong>
+
+                                    <?php if (
+                                        !empty($gol->jornada->fecha)
+                                    ): ?>
 
                                         <?= h(
-                                            $incidencia->descripcion
+                                            $gol
+                                                ->jornada
+                                                ->fecha
+                                                ->format('d/m/Y')
                                         ) ?>
 
-                                    </td>
+                                    <?php else: ?>
+
+                                        Sin fecha
+
+                                    <?php endif; ?>
+
+                                </strong>
+
+                            </div>
 
 
-                                    <td>
+                            <div>
 
-                                        <?php if (
-                                            $incidencia->tipo_tarjeta === 'Roja'
-                                        ): ?>
+                                <span>
+                                    Goles
+                                </span>
 
-                                            <span style="
-                                                background:#dc3545;
-                                                color:white;
-                                                padding:6px 10px;
-                                                border-radius:5px;
-                                                font-weight:bold;
-                                            ">
+                                <strong class="mobile-goal-value">
 
-                                                Roja
+                                    ⚽ <?= h($gol->cantidad) ?>
 
-                                            </span>
+                                </strong>
 
-                                        <?php else: ?>
+                            </div>
 
-                                            <span style="
-                                                background:#f4c430;
-                                                color:#222;
-                                                padding:6px 10px;
-                                                border-radius:5px;
-                                                font-weight:bold;
-                                            ">
+                        </div>
 
-                                                Amarilla
+                    </article>
 
-                                            </span>
+                <?php endforeach; ?>
 
-                                        <?php endif; ?>
-
-                                    </td>
+            </div>
 
 
-                                    <td>
+        <?php else: ?>
 
-                                        <?php if (
-                                            !empty(
-                                                $incidencia->fecha_incidencia
-                                            )
-                                        ): ?>
+            <div class="profile-empty-state">
 
-                                            <?= h(
-                                                $incidencia
-                                                    ->fecha_incidencia
-                                                    ->format('d/m/Y')
-                                            ) ?>
+                <div>
+                    ⚽
+                </div>
 
-                                        <?php endif; ?>
+                <strong>
+                    Sin goles registrados
+                </strong>
 
-                                    </td>
+                <span>
+                    El jugador todavía no tiene anotaciones.
+                </span>
+
+            </div>
+
+        <?php endif; ?>
+
+    </section>
 
 
-                                    <td>
+    <!-- =====================================================
+         HISTORIAL DE INCIDENCIAS
+         ===================================================== -->
 
-                                        <?php if (
-                                            !empty(
-                                                $incidencia->fecha_suspension
-                                            )
-                                        ): ?>
+    <section class="profile-section-card">
+
+        <div class="profile-section-header">
+
+            <div>
+
+                <div class="profile-section-icon incident-icon">
+                    🟨
+                </div>
+
+                <div>
+                    <h2>
+                        Historial de Incidencias
+                    </h2>
+
+                    <p>
+                        Tarjetas, faltas y suspensiones registradas.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <?php if (!empty($jugadore->incidencias)): ?>
+
+
+            <!-- DESKTOP -->
+
+            <div class="profile-desktop-table">
+
+                <table class="profile-table">
+
+                    <thead>
+                        <tr>
+                            <th>Descripción</th>
+                            <th>Tarjeta</th>
+                            <th>Fecha</th>
+                            <th>Suspensión</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <?php foreach (
+                            $jugadore->incidencias as $incidencia
+                        ): ?>
+
+                            <tr>
+
+                                <td>
+                                    <?= h($incidencia->descripcion) ?>
+                                </td>
+
+
+                                <td>
+
+                                    <?php if (
+                                        $incidencia->tipo_tarjeta === 'Roja'
+                                    ): ?>
+
+                                        <span class="card-badge card-red">
+                                            🟥 Roja
+                                        </span>
+
+                                    <?php else: ?>
+
+                                        <span class="card-badge card-yellow">
+                                            🟨 Amarilla
+                                        </span>
+
+                                    <?php endif; ?>
+
+                                </td>
+
+
+                                <td>
+
+                                    <?php if (
+                                        !empty(
+                                            $incidencia->fecha_incidencia
+                                        )
+                                    ): ?>
+
+                                        <?= h(
+                                            $incidencia
+                                                ->fecha_incidencia
+                                                ->format('d/m/Y')
+                                        ) ?>
+
+                                    <?php else: ?>
+
+                                        Sin fecha
+
+                                    <?php endif; ?>
+
+                                </td>
+
+
+                                <td>
+
+                                    <?php if (
+                                        !empty(
+                                            $incidencia->fecha_suspension
+                                        )
+                                    ): ?>
+
+                                        <span class="suspension-badge">
+
+                                            ⛔
 
                                             <?= h(
                                                 $incidencia
@@ -458,33 +581,206 @@
                                                     ->format('d/m/Y')
                                             ) ?>
 
-                                        <?php else: ?>
+                                        </span>
 
+                                    <?php else: ?>
+
+                                        <span class="no-suspension">
                                             No aplica
+                                        </span>
 
-                                        <?php endif; ?>
+                                    <?php endif; ?>
 
-                                    </td>
+                                </td>
 
-                                </tr>
+                            </tr>
 
-                            <?php endforeach; ?>
+                        <?php endforeach; ?>
 
-                        </tbody>
+                    </tbody>
 
-                    </table>
+                </table>
 
+            </div>
+
+
+            <!-- MOBILE -->
+
+            <div class="profile-mobile-history">
+
+                <?php foreach (
+                    $jugadore->incidencias as $incidencia
+                ): ?>
+
+                    <article class="history-mobile-card">
+
+                        <div class="incident-history-header">
+
+                            <div>
+
+                                <?php if (
+                                    $incidencia->tipo_tarjeta === 'Roja'
+                                ): ?>
+
+                                    <span class="card-badge card-red">
+                                        🟥 Roja
+                                    </span>
+
+                                <?php else: ?>
+
+                                    <span class="card-badge card-yellow">
+                                        🟨 Amarilla
+                                    </span>
+
+                                <?php endif; ?>
+
+                            </div>
+
+                            <span class="incident-history-id">
+                                Incidencia
+                            </span>
+
+                        </div>
+
+
+                        <div class="history-description">
+
+                            <span>
+                                Descripción
+                            </span>
+
+                            <strong>
+                                <?= h($incidencia->descripcion) ?>
+                            </strong>
+
+                        </div>
+
+
+                        <div class="history-mobile-grid">
+
+                            <div>
+
+                                <span>
+                                    Fecha
+                                </span>
+
+                                <strong>
+
+                                    <?php if (
+                                        !empty(
+                                            $incidencia->fecha_incidencia
+                                        )
+                                    ): ?>
+
+                                        <?= h(
+                                            $incidencia
+                                                ->fecha_incidencia
+                                                ->format('d/m/Y')
+                                        ) ?>
+
+                                    <?php else: ?>
+
+                                        Sin fecha
+
+                                    <?php endif; ?>
+
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Suspensión
+                                </span>
+
+                                <strong>
+
+                                    <?php if (
+                                        !empty(
+                                            $incidencia->fecha_suspension
+                                        )
+                                    ): ?>
+
+                                        <?= h(
+                                            $incidencia
+                                                ->fecha_suspension
+                                                ->format('d/m/Y')
+                                        ) ?>
+
+                                    <?php else: ?>
+
+                                        No aplica
+
+                                    <?php endif; ?>
+
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                <?php endforeach; ?>
+
+            </div>
+
+
+        <?php else: ?>
+
+            <div class="profile-empty-state">
+
+                <div>
+                    📋
                 </div>
 
-            <?php else: ?>
+                <strong>
+                    Sin incidencias
+                </strong>
 
-                <p>
+                <span>
                     El jugador no tiene incidencias registradas.
-                </p>
+                </span>
 
-            <?php endif; ?>
+            </div>
 
-        </div>
+        <?php endif; ?>
+
+    </section>
+
+
+    <!-- =====================================================
+         ACCIONES FINALES
+         ===================================================== -->
+
+    <div class="profile-bottom-actions">
+
+        <?= $this->Html->link(
+            '← Lista de jugadores',
+            [
+                'action' => 'index'
+            ],
+            [
+                'class' => 'form-secondary-button'
+            ]
+        ) ?>
+
+
+        <?= $this->Form->postLink(
+            '🗑 Eliminar jugador',
+            [
+                'action' => 'delete',
+                $jugadore->id
+            ],
+            [
+                'confirm' =>
+                    '¿Está seguro de eliminar este jugador?',
+                'class' =>
+                    'form-danger-button'
+            ]
+        ) ?>
 
     </div>
 

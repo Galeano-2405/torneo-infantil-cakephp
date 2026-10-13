@@ -5,59 +5,167 @@
  * @var \Cake\Collection\CollectionInterface|string[] $equipos
  */
 ?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
+
+<div class="form-page">
+
+    <div class="form-header">
+
+        <div>
+
+            <div class="form-kicker">
+                Registro de jugador
+            </div>
+
+            <h1>
+                Nuevo jugador
+            </h1>
+
+            <p>
+                Registra los datos generales y fotografía del jugador.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="form-card">
+
+        <div class="form-card-top">
+
+            <h3>
+                Información del jugador
+            </h3>
+
+            <p>
+                Complete los campos requeridos para crear el registro.
+            </p>
+
+        </div>
+
+
+        <?= $this->Form->create(
+            $jugadore,
+            ['type' => 'file']
+        ) ?>
+
+
+        <div class="form-card-body">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <?= $this->Form->control(
+                        'nombres',
+                        [
+                            'label' => 'Nombres',
+                            'placeholder' => 'Ingrese los nombres'
+                        ]
+                    ) ?>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <?= $this->Form->control(
+                        'apellidos',
+                        [
+                            'label' => 'Apellidos',
+                            'placeholder' => 'Ingrese los apellidos'
+                        ]
+                    ) ?>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <?= $this->Form->control(
+                        'fecha_nacimiento',
+                        [
+                            'label' => 'Fecha de nacimiento'
+                        ]
+                    ) ?>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <?= $this->Form->control(
+                        'equipo_id',
+                        [
+                            'label' => 'Equipo',
+                            'options' => $equipos,
+                            'empty' => 'Seleccione un equipo'
+                        ]
+                    ) ?>
+
+                </div>
+
+
+                <div class="form-group full-width">
+
+                    <label>
+                        Fotografía
+                    </label>
+
+                    <div class="file-box">
+
+                        <?= $this->Form->control(
+                            'fotografia',
+                            [
+                                'type' => 'file',
+                                'label' => false,
+                                'accept' =>
+                                    'image/jpeg,image/png,image/jpg'
+                            ]
+                        ) ?>
+
+                    </div>
+
+                    <span class="form-help">
+                        Formatos permitidos: JPG, JPEG y PNG.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-card-footer">
 
             <?= $this->Html->link(
-                __('List Jugadores'),
-                ['action' => 'index'],
-                ['class' => 'side-nav-item']
+                '← Volver a jugadores',
+                [
+                    'action' => 'index'
+                ],
+                [
+                    'class' => 'form-secondary-button'
+                ]
             ) ?>
 
-        </div>
-    </aside>
 
-    <div class="column column-80">
-        <div class="jugadores form content">
+            <div class="form-actions">
 
-            <?= $this->Form->create($jugadore, ['type' => 'file']) ?>
+                <?= $this->Form->button(
+                    'Guardar jugador',
+                    [
+                        'class' => 'button'
+                    ]
+                ) ?>
 
-            <fieldset>
-                <legend><?= __('Add Jugadore') ?></legend>
-
-                <?php
-                    echo $this->Form->control('nombres', [
-                        'label' => 'Nombres'
-                    ]);
-
-                    echo $this->Form->control('apellidos', [
-                        'label' => 'Apellidos'
-                    ]);
-
-                    echo $this->Form->control('fecha_nacimiento', [
-                        'label' => 'Fecha de nacimiento'
-                    ]);
-
-                    echo $this->Form->control('fotografia', [
-                        'type' => 'file',
-                        'label' => 'Fotografía',
-                        'accept' => 'image/jpeg,image/png,image/jpg'
-                    ]);
-
-                    echo $this->Form->control('equipo_id', [
-                        'options' => $equipos,
-                        'label' => 'Equipo'
-                    ]);
-                ?>
-
-            </fieldset>
-
-            <?= $this->Form->button(__('Guardar jugador')) ?>
-
-            <?= $this->Form->end() ?>
+            </div>
 
         </div>
+
+
+        <?= $this->Form->end() ?>
+
     </div>
+
 </div>
