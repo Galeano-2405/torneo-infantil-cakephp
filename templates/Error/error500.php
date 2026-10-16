@@ -28,9 +28,12 @@ if (Configure::read('debug')) :
 
     $this->end();
 endif;
+
+$this->assign('title', 'Error del servidor');
 ?>
-<h2><?= __d('cake', 'An Internal Error Has Occurred.') ?></h2>
-<p class="error">
-    <strong><?= __d('cake', 'Error') ?>: </strong>
-    <?= h($message) ?>
+<div class="error-page__code">500</div>
+<h2>Algo falló de nuestro lado</h2>
+<p>
+    No se pudo completar la acción. Intenta de nuevo en unos minutos;
+    si sigue pasando, revisa la conexión a la base de datos.
 </p>

@@ -62,9 +62,9 @@ class EquiposTable extends Table
     {
         $validator
             ->scalar('nombre')
-            ->maxLength('nombre', 100)
-            ->requirePresence('nombre', 'create')
-            ->notEmptyString('nombre');
+            ->maxLength('nombre', 100, 'El nombre no puede pasar de 100 caracteres.')
+            ->requirePresence('nombre', 'create', 'Debe ingresar el nombre del equipo.')
+            ->notEmptyString('nombre', 'Debe ingresar el nombre del equipo.');
 
         return $validator;
     }

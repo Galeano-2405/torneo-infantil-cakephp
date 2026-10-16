@@ -4,221 +4,81 @@
  * @var \App\Model\Entity\Jugadore $jugadore
  * @var string[]|\Cake\Collection\CollectionInterface $equipos
  */
+$nombreCompleto = $jugadore->nombres . ' ' . $jugadore->apellidos;
 ?>
+<div class="reveal">
 
-<div class="form-page">
+    <?= $this->element('page_head', [
+        'title' => 'Editar jugador',
+        'lead' => 'Actualiza los datos de ' . $nombreCompleto . '.',
+        'icon' => 'edit',
+        'tone' => 'blue',
+    ]) ?>
 
-    <div class="form-header">
-
-        <div>
-
-            <div class="form-kicker">
-                Actualización de jugador
-            </div>
-
-            <h1>
-                Editar jugador
-            </h1>
-
-            <p>
-                Actualiza la información registrada del jugador.
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div class="form-card">
-
-        <div class="form-card-top">
-
-            <h3>
-                Datos del jugador
-            </h3>
-
-            <p>
-                Modifica únicamente los campos que necesites actualizar.
-            </p>
-
-        </div>
-
-
-        <?= $this->Form->create(
-            $jugadore,
-            ['type' => 'file']
-        ) ?>
-
-
-        <div class="form-card-body">
-
-            <div class="form-grid">
-
-                <div class="form-group">
-
-                    <?= $this->Form->control(
-                        'nombres',
-                        [
-                            'label' => 'Nombres'
-                        ]
-                    ) ?>
-
+    <section class="panel form-panel">
+        <?= $this->Form->create($jugadore, ['type' => 'file']) ?>
+            <div class="form-section">
+                <div>
+                    <h2 class="form-section__title">Datos personales</h2>
+                    <p class="form-section__text">Jugador #<?= $jugadore->id ?></p>
                 </div>
-
-
-                <div class="form-group">
-
-                    <?= $this->Form->control(
-                        'apellidos',
-                        [
-                            'label' => 'Apellidos'
-                        ]
-                    ) ?>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <?= $this->Form->control(
-                        'fecha_nacimiento',
-                        [
-                            'label' => 'Fecha de nacimiento'
-                        ]
-                    ) ?>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <?= $this->Form->control(
-                        'equipo_id',
-                        [
+                <div class="form-grid">
+                    <div class="field">
+                        <?= $this->Form->control('nombres', ['label' => 'Nombres']) ?>
+                    </div>
+                    <div class="field">
+                        <?= $this->Form->control('apellidos', ['label' => 'Apellidos']) ?>
+                    </div>
+                    <div class="field">
+                        <?= $this->Form->control('fecha_nacimiento', ['label' => 'Fecha de nacimiento']) ?>
+                    </div>
+                    <div class="field">
+                        <?= $this->Form->control('equipo_id', [
                             'label' => 'Equipo',
-                            'options' => $equipos
-                        ]
-                    ) ?>
-
+                            'options' => $equipos,
+                        ]) ?>
+                    </div>
                 </div>
+            </div>
 
-
-                <?php if (!empty($jugadore->fotografia)): ?>
-
-                    <div class="form-group full-width">
-
-                        <label>
-                            Fotografía actual
-                        </label>
-
-                        <div class="current-photo-box">
-
-                            <?= $this->Html->image(
-                                'jugadores/' .
-                                $jugadore->fotografia,
-                                [
-                                    'alt' =>
-                                        'Fotografía de ' .
-                                        $jugadore->nombres
-                                ]
-                            ) ?>
-
-
-                            <div>
-
-                                <strong>
-                                    <?= h(
-                                        $jugadore->nombres .
-                                        ' ' .
-                                        $jugadore->apellidos
-                                    ) ?>
-                                </strong>
-
-                                <span>
-                                    Esta fotografía se conservará si no seleccionas una nueva.
-                                </span>
-
+            <div class="form-section">
+                <div>
+                    <h2 class="form-section__title">Fotografía</h2>
+                    <p class="form-section__text">Si no eliges una nueva, se conserva la actual.</p>
+                </div>
+                <div class="form-grid">
+                    <?php if (!empty($jugadore->fotografia)): ?>
+                        <div class="field span-2">
+                            <span class="field-label">Foto actual</span>
+                            <div class="current-photo">
+                                <?= $this->Html->image(
+                                    'jugadores/' . $jugadore->fotografia,
+                                    ['alt' => 'Fotografía de ' . $jugadore->nombres]
+                                ) ?>
+                                <div>
+                                    <strong><?= h($nombreCompleto) ?></strong>
+                                    <p class="hint">Se reemplaza solo si subes otra foto.</p>
+                                </div>
                             </div>
-
                         </div>
+                    <?php endif; ?>
 
-                    </div>
-
-                <?php endif; ?>
-
-
-                <div class="form-group full-width">
-
-                    <label>
-                        Cambiar fotografía
-                    </label>
-
-                    <div class="file-box">
-
-                        <?= $this->Form->control(
-                            'fotografia_nueva',
-                            [
-                                'type' => 'file',
-                                'label' => false,
-                                'accept' =>
-                                    'image/jpeg,image/png,image/jpg',
-                                'required' => false
-                            ]
-                        ) ?>
-
-                    </div>
-
+                    <?= $this->element('photo_dropzone', [
+                        'campo' => 'fotografia_nueva',
+                        'titulo' => !empty($jugadore->fotografia) ? 'Cambiar foto' : 'Agregar foto',
+                    ]) ?>
                 </div>
-
             </div>
 
-        </div>
-
-
-        <div class="form-card-footer">
-
-            <?= $this->Html->link(
-                '← Volver a jugadores',
-                [
-                    'action' => 'index'
-                ],
-                [
-                    'class' => 'form-secondary-button'
-                ]
-            ) ?>
-
-
-            <div class="form-actions">
-
-                <?= $this->Form->postLink(
-                    'Eliminar',
-                    [
-                        'action' => 'delete',
-                        $jugadore->id
-                    ],
-                    [
-                        'confirm' =>
-                            '¿Está seguro de eliminar este jugador?',
-                        'class' =>
-                            'form-danger-button'
-                    ]
-                ) ?>
-
-
-                <?= $this->Form->button(
-                    'Guardar cambios',
-                    [
-                        'class' => 'button'
-                    ]
-                ) ?>
-
-            </div>
-
-        </div>
-
-
+            <?= $this->element('form_bar', ['volver' => 'Volver a jugadores', 'guardar' => 'Guardar cambios']) ?>
         <?= $this->Form->end() ?>
+    </section>
 
-    </div>
+    <?= $this->element('danger_zone', [
+        'id' => $jugadore->id,
+        'que' => 'este jugador',
+        'confirm' => '¿Eliminar a ' . $jugadore->nombres . '?',
+        'nota' => 'También se borran su fotografía, sus goles y sus incidencias.',
+    ]) ?>
 
 </div>

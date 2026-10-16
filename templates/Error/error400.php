@@ -18,9 +18,12 @@ if (Configure::read('debug')) :
     echo $this->element('auto_table_warning');
     $this->end();
 endif;
+
+$this->assign('title', 'Página no encontrada');
 ?>
-<h2><?= h($message) ?></h2>
-<p class="error">
-    <strong><?= __d('cake', 'Error') ?>: </strong>
-    <?= __d('cake', 'The requested address {0} was not found on this server.', "<strong>'{$url}'</strong>") ?>
+<div class="error-page__code">404</div>
+<h2>Esta página no existe</h2>
+<p>
+    La dirección <strong><?= h($url) ?></strong> no se encontró.
+    Revisa que esté bien escrita o vuelve al inicio.
 </p>

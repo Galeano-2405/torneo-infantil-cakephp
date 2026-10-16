@@ -7,321 +7,153 @@
  * @var int|string|null $jugadorId
  * @var iterable $incidenciasReporte
  */
+
+$filas = [];
+foreach ($incidenciasReporte as $inc) {
+    $filas[] = $inc;
+}
+$amarillas = 0;
+$rojas = 0;
+$conSuspension = 0;
+foreach ($filas as $inc) {
+    $inc->tipo_tarjeta === 'Roja' ? $rojas++ : $amarillas++;
+    if (!empty($inc->fecha_suspension)) {
+        $conSuspension++;
+    }
+}
+$hayFiltros = !empty($equipoId) || !empty($jugadorId);
 ?>
+<div class="reveal">
 
-<div class="incidencias index content">
+    <?= $this->element('page_head', [
+        'title' => 'Reporte de incidencias',
+        'lead' => 'Filtra por equipo o jugador para revisar su historial disciplinario.',
+        'icon' => 'clipboard',
+        'tone' => 'red',
+        'actions' => $this->Html->link(
+            $this->element('icon', ['name' => 'arrow-left']) . 'Incidencias',
+            ['action' => 'index'],
+            ['class' => 'btn btn--ghost', 'escape' => false]
+        ),
+    ]) ?>
 
-    <div style="
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        margin-bottom:25px;
-    ">
+    <section class="panel filter-panel">
+        <div class="panel__body">
+            <?= $this->Form->create(null, ['type' => 'get']) ?>
+                <div class="filter-bar">
+                    <?= $this->Form->control('equipo_id', [
+                        'label' => 'Equipo',
+                        'options' => $equipos,
+                        'empty' => 'Todos los equipos',
+                        'value' => $equipoId,
+                    ]) ?>
+                    <?= $this->Form->control('jugador_id', [
+                        'label' => 'Jugador',
+                        'options' => $jugadores,
+                        'empty' => 'Todos los jugadores',
+                        'value' => $jugadorId,
+                    ]) ?>
+                    <div class="filter-bar__actions">
+                        <?= $this->Form->button(
+                            $this->element('icon', ['name' => 'filter']) . 'Consultar',
+                            ['class' => 'btn btn--primary', 'escapeTitle' => false, 'type' => 'submit']
+                        ) ?>
+                        <?php if ($hayFiltros): ?>
+                            <?= $this->Html->link(
+                                $this->element('icon', ['name' => 'refresh']) . 'Limpiar',
+                                ['action' => 'reporte'],
+                                ['class' => 'btn btn--ghost', 'escape' => false]
+                            ) ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?= $this->Form->end() ?>
+        </div>
+    </section>
 
-        <div>
-            <h3 style="margin-bottom:5px;">
-                Reporte de Incidencias
-            </h3>
-
-            <p>
-                Consulte incidencias por equipo y jugador.
-            </p>
+    <section class="panel">
+        <div class="panel__head">
+            <h2 class="panel__title">Resultados</h2>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <span class="count-chip"><span class="ref-card ref-card--amarilla"><strong><?= $amarillas ?></strong></span> amarillas</span>
+                <span class="count-chip"><span class="ref-card ref-card--roja"><strong><?= $rojas ?></strong></span> rojas</span>
+                <span class="count-chip"><strong><?= $conSuspension ?></strong> con suspensión</span>
+            </div>
         </div>
 
-        <?= $this->Html->link(
-            'Volver a Incidencias',
-            ['action' => 'index'],
-            ['class' => 'button']
-        ) ?>
-
-    </div>
-
-
-    <!-- Filtros -->
-
-    <div style="
-        background:#f7f7f7;
-        padding:20px;
-        border-radius:8px;
-        margin-bottom:30px;
-    ">
-
-        <?= $this->Form->create(
-            null,
-            [
-                'type' => 'get'
-            ]
-        ) ?>
-
-        <?= $this->Form->control(
-            'equipo_id',
-            [
-                'label' => 'Equipo',
-                'options' => $equipos,
-                'empty' => 'Todos los equipos',
-                'value' => $equipoId
-            ]
-        ) ?>
-
-        <?= $this->Form->control(
-            'jugador_id',
-            [
-                'label' => 'Jugador',
-                'options' => $jugadores,
-                'empty' => 'Todos los jugadores',
-                'value' => $jugadorId
-            ]
-        ) ?>
-
-        <?= $this->Form->button(
-            'Consultar'
-        ) ?>
-
-        <?= $this->Html->link(
-            'Limpiar filtros',
-            ['action' => 'reporte'],
-            [
-                'class' => 'button button-outline',
-                'style' => 'margin-left:10px;'
-            ]
-        ) ?>
-
-        <?= $this->Form->end() ?>
-
-    </div>
-
-
-    <!-- Resultados -->
-
-    <div class="table-responsive">
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>
-                        Fotografía
-                    </th>
-
-                    <th>
-                        Jugador
-                    </th>
-
-                    <th>
-                        Equipo
-                    </th>
-
-                    <th>
-                        Descripción
-                    </th>
-
-                    <th>
-                        Tarjeta
-                    </th>
-
-                    <th>
-                        Fecha incidencia
-                    </th>
-
-                    <th>
-                        Fecha suspensión
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody>
-
-                <?php if (!empty($incidenciasReporte)): ?>
-
-                    <?php foreach ($incidenciasReporte as $incidencia): ?>
-
+        <?php if (!empty($filas)): ?>
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
                         <tr>
-
-                            <!-- Fotografía -->
-                            <td>
-
-                                <?php if (
-                                    !empty(
-                                        $incidencia
-                                            ->jugador
-                                            ->fotografia
-                                    )
-                                ): ?>
-
-                                    <?= $this->Html->image(
-                                        'jugadores/' .
-                                        $incidencia
-                                            ->jugador
-                                            ->fotografia,
-                                        [
-                                            'style' => '
-                                                width:65px;
-                                                height:65px;
-                                                object-fit:cover;
-                                                border-radius:8px;
-                                            '
-                                        ]
-                                    ) ?>
-
-                                <?php else: ?>
-
-                                    Sin fotografía
-
-                                <?php endif; ?>
-
-                            </td>
-
-
-                            <!-- Jugador -->
-                            <td>
-
-                                <?= h(
-                                    $incidencia
-                                        ->jugador
-                                        ->nombres .
-                                    ' ' .
-                                    $incidencia
-                                        ->jugador
-                                        ->apellidos
-                                ) ?>
-
-                            </td>
-
-
-                            <!-- Equipo -->
-                            <td>
-
-                                <?= h(
-                                    $incidencia
-                                        ->jugador
-                                        ->equipo
-                                        ->nombre
-                                    ?? 'Sin equipo'
-                                ) ?>
-
-                            </td>
-
-
-                            <!-- Descripción -->
-                            <td>
-
-                                <?= h(
-                                    $incidencia->descripcion
-                                ) ?>
-
-                            </td>
-
-
-                            <!-- Tipo de tarjeta -->
-                            <td>
-
-                                <?php if (
-                                    $incidencia->tipo_tarjeta === 'Roja'
-                                ): ?>
-
-                                    <span style="
-                                        background:#dc3545;
-                                        color:white;
-                                        padding:6px 10px;
-                                        border-radius:5px;
-                                        font-weight:bold;
-                                    ">
-                                        Roja
-                                    </span>
-
-                                <?php else: ?>
-
-                                    <span style="
-                                        background:#f4c430;
-                                        color:#222;
-                                        padding:6px 10px;
-                                        border-radius:5px;
-                                        font-weight:bold;
-                                    ">
-                                        Amarilla
-                                    </span>
-
-                                <?php endif; ?>
-
-                            </td>
-
-
-                            <!-- Fecha incidencia -->
-                            <td>
-
-                                <?php if (
-                                    !empty(
-                                        $incidencia->fecha_incidencia
-                                    )
-                                ): ?>
-
-                                    <?= h(
-                                        $incidencia
-                                            ->fecha_incidencia
-                                            ->format('d/m/Y')
-                                    ) ?>
-
-                                <?php endif; ?>
-
-                            </td>
-
-
-                            <!-- Fecha suspensión -->
-                            <td>
-
-                                <?php if (
-                                    !empty(
-                                        $incidencia->fecha_suspension
-                                    )
-                                ): ?>
-
-                                    <?= h(
-                                        $incidencia
-                                            ->fecha_suspension
-                                            ->format('d/m/Y')
-                                    ) ?>
-
-                                <?php else: ?>
-
-                                    No aplica
-
-                                <?php endif; ?>
-
-                            </td>
-
+                            <th>Jugador</th>
+                            <th>Equipo</th>
+                            <th>Tarjeta</th>
+                            <th>Motivo</th>
+                            <th>Fecha</th>
+                            <th>Suspendido para</th>
                         </tr>
-
-                    <?php endforeach; ?>
-
-                <?php else: ?>
-
-                    <tr>
-
-                        <td
-                            colspan="7"
-                            style="
-                                text-align:center;
-                                padding:30px;
-                            "
-                        >
-
-                            No se encontraron incidencias con los filtros seleccionados.
-
-                        </td>
-
-                    </tr>
-
+                    </thead>
+                    <tbody>
+                        <?php foreach ($filas as $incidencia): ?>
+                            <?php
+                            $jugador = $incidencia->jugador ?? null;
+                            $nombreCompleto = $jugador
+                                ? $jugador->nombres . ' ' . $jugador->apellidos
+                                : 'Jugador #' . $incidencia->jugador_id;
+                            $esRoja = $incidencia->tipo_tarjeta === 'Roja';
+                            ?>
+                            <tr>
+                                <td class="cell-main" data-label="Jugador">
+                                    <div class="who">
+                                        <?= $this->element('avatar', ['foto' => $jugador->fotografia ?? null, 'nombre' => $nombreCompleto]) ?>
+                                        <?= $this->Html->link(
+                                            h($nombreCompleto),
+                                            ['controller' => 'Jugadores', 'action' => 'view', $incidencia->jugador_id],
+                                            ['class' => 'who__name', 'escape' => false]
+                                        ) ?>
+                                    </div>
+                                </td>
+                                <td data-label="Equipo">
+                                    <?= h($jugador->equipo->nombre ?? 'Sin equipo') ?>
+                                </td>
+                                <td data-label="Tarjeta">
+                                    <span class="ref-card ref-card--<?= $esRoja ? 'roja' : 'amarilla' ?>"><?= $esRoja ? 'Roja' : 'Amarilla' ?></span>
+                                </td>
+                                <td class="cell-block" data-label="Motivo"><?= h($incidencia->descripcion) ?></td>
+                                <td data-label="Fecha">
+                                    <?= !empty($incidencia->fecha_incidencia) ? h($incidencia->fecha_incidencia->format('d/m/Y')) : '<span class="muted">Sin fecha</span>' ?>
+                                </td>
+                                <td data-label="Suspendido para">
+                                    <?php if (!empty($incidencia->fecha_suspension)): ?>
+                                        <span class="tag tag--ban"><?= $this->element('icon', ['name' => 'ban']) ?><?= h($incidencia->fecha_suspension->format('d/m/Y')) ?></span>
+                                    <?php else: ?>
+                                        <span class="muted">Sin suspensión</span>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php else: ?>
+            <div class="empty">
+                <span class="empty__icon"><?= $this->element('icon', ['name' => 'search']) ?></span>
+                <p class="empty__title">Sin resultados</p>
+                <p class="empty__text">
+                    <?= $hayFiltros
+                        ? 'No hay incidencias con estos filtros. Prueba con otro equipo o jugador.'
+                        : 'Todavía no hay incidencias registradas en el torneo.' ?>
+                </p>
+                <?php if ($hayFiltros): ?>
+                    <?= $this->Html->link(
+                        $this->element('icon', ['name' => 'refresh']) . 'Limpiar filtros',
+                        ['action' => 'reporte'],
+                        ['class' => 'btn btn--ghost', 'escape' => false]
+                    ) ?>
                 <?php endif; ?>
-
-            </tbody>
-
-        </table>
-
-    </div>
+            </div>
+        <?php endif; ?>
+    </section>
 
 </div>

@@ -4,102 +4,35 @@
  * @var \App\Model\Entity\Equipo $equipo
  */
 ?>
+<div class="reveal">
 
-<div class="form-page">
+    <?= $this->element('page_head', [
+        'title' => 'Nuevo equipo',
+        'lead' => 'Inscribe un equipo para poder asignarle jugadores.',
+        'icon' => 'shield',
+    ]) ?>
 
-    <div class="form-header">
-
-        <div>
-
-            <div class="form-kicker">
-                Catálogo del torneo
-            </div>
-
-            <h1>
-                Nuevo equipo
-            </h1>
-
-            <p>
-                Registra un nuevo equipo participante del torneo.
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div class="form-card">
-
-        <div class="form-card-top">
-
-            <h3>
-                Información del equipo
-            </h3>
-
-            <p>
-                Completa los datos necesarios para crear el equipo.
-            </p>
-
-        </div>
-
-
+    <section class="panel form-panel">
         <?= $this->Form->create($equipo) ?>
-
-
-        <div class="form-card-body">
-
-            <div class="form-grid">
-
-                <div class="form-group full-width">
-
-                    <?= $this->Form->control(
-                        'nombre',
-                        [
-                            'label' => 'Nombre del equipo',
-                            'placeholder' => 'Ejemplo: FC Barcelona'
-                        ]
-                    ) ?>
-
-                    <span class="form-help">
-                        Ingresa el nombre con el que será identificado el equipo.
-                    </span>
-
+            <div class="form-section">
+                <div>
+                    <h2 class="form-section__title">Datos del equipo</h2>
+                    <p class="form-section__text">El nombre aparece en las listas, los reportes y el perfil de cada jugador.</p>
                 </div>
-
+                <div class="form-grid">
+                    <div class="field span-2">
+                        <?= $this->Form->control('nombre', [
+                            'label' => 'Nombre del equipo',
+                            'placeholder' => 'Ejemplo: Leones del Norte',
+                            'autofocus' => true,
+                        ]) ?>
+                        <p class="hint">Usa el nombre con el que el equipo se presenta en el torneo.</p>
+                    </div>
+                </div>
             </div>
 
-        </div>
-
-
-        <div class="form-card-footer">
-
-            <?= $this->Html->link(
-                '← Volver a equipos',
-                [
-                    'action' => 'index'
-                ],
-                [
-                    'class' => 'form-secondary-button'
-                ]
-            ) ?>
-
-
-            <div class="form-actions">
-
-                <?= $this->Form->button(
-                    'Guardar equipo',
-                    [
-                        'class' => 'button'
-                    ]
-                ) ?>
-
-            </div>
-
-        </div>
-
-
+            <?= $this->element('form_bar', ['volver' => 'Volver a equipos', 'guardar' => 'Guardar equipo']) ?>
         <?= $this->Form->end() ?>
-
-    </div>
+    </section>
 
 </div>

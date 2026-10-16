@@ -4,471 +4,103 @@
  * @var iterable<\App\Model\Entity\Jugadore> $jugadores
  */
 ?>
+<div class="reveal">
 
-<div class="players-page">
+    <?= $this->element('page_head', [
+        'title' => 'Jugadores',
+        'lead' => 'Los niños y niñas inscritos, con su equipo y fotografía.',
+        'icon' => 'shirt',
+        'tone' => 'blue',
+        'actions' => $this->Html->link(
+            $this->element('icon', ['name' => 'plus']) . 'Inscribir jugador',
+            ['action' => 'add'],
+            ['class' => 'btn btn--primary', 'escape' => false]
+        ),
+    ]) ?>
 
-    <!-- CABECERA -->
-    <div class="players-header">
-
-        <div>
-            <div class="players-kicker">
-                Gestión de plantilla
-            </div>
-
-            <h1>
-                Jugadores
-            </h1>
-
-            <p>
-                Administra los jugadores registrados, sus equipos
-                y fotografías.
-            </p>
+    <section class="panel">
+        <div class="panel__head">
+            <h2 class="panel__title">Plantilla</h2>
+            <span class="count-chip"><strong><?= $this->Paginator->param('count') ?? count($jugadores) ?></strong> jugadores inscritos</span>
         </div>
 
-        <div class="players-header-actions">
-
-            <?= $this->Html->link(
-                '＋ Nuevo jugador',
-                [
-                    'controller' => 'Jugadores',
-                    'action' => 'add'
-                ],
-                [
-                    'class' => 'button'
-                ]
-            ) ?>
-
-        </div>
-
-    </div>
-
-
-    <!-- RESUMEN -->
-    <div class="players-summary">
-
-        <div class="players-summary-card">
-
-            <div class="players-summary-icon">
-                👥
-            </div>
-
-            <div>
-                <strong>
-                    <?= count($jugadores) ?>
-                </strong>
-
-                <span>
-                    Jugadores mostrados
-                </span>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- DESKTOP / TABLET -->
-    <div class="players-table-card">
-
-        <div class="players-table-top">
-
-            <div>
-                <h3>
-                    Lista de jugadores
-                </h3>
-
-                <p>
-                    Información general de los participantes.
-                </p>
-            </div>
-
-        </div>
-
-
-        <div class="table-responsive players-desktop-table">
-
-            <table class="players-table">
-
-                <thead>
-                    <tr>
-                        <th>Jugador</th>
-                        <th>Fecha nacimiento</th>
-                        <th>Equipo</th>
-                        <th>Registro</th>
-                        <th class="players-actions-column">
-                            Acciones
-                        </th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    <?php foreach ($jugadores as $jugadore): ?>
-
+        <?php if (count($jugadores) > 0): ?>
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
                         <tr>
-
-                            <!-- JUGADOR -->
-                            <td>
-
-                                <div class="player-cell">
-
-                                    <div class="player-avatar">
-
-                                        <?php if (!empty($jugadore->fotografia)): ?>
-
-                                            <?= $this->Html->image(
-                                                'jugadores/' . $jugadore->fotografia,
-                                                [
-                                                    'alt' =>
-                                                        'Fotografía de ' .
-                                                        $jugadore->nombres
-                                                ]
-                                            ) ?>
-
-                                        <?php else: ?>
-
-                                            <span>
-                                                👤
-                                            </span>
-
-                                        <?php endif; ?>
-
-                                    </div>
-
-
-                                    <div class="player-cell-info">
-
-                                        <strong>
-                                            <?= h(
-                                                $jugadore->nombres .
-                                                ' ' .
-                                                $jugadore->apellidos
-                                            ) ?>
-                                        </strong>
-
-                                        <span>
-                                            ID #<?= $jugadore->id ?>
-                                        </span>
-
-                                    </div>
-
-                                </div>
-
-                            </td>
-
-
-                            <!-- NACIMIENTO -->
-                            <td>
-
-                                <?php if (!empty($jugadore->fecha_nacimiento)): ?>
-
-                                    <?= h(
-                                        $jugadore
-                                            ->fecha_nacimiento
-                                            ->format('d/m/Y')
-                                    ) ?>
-
-                                <?php else: ?>
-
-                                    <span class="muted-value">
-                                        Sin fecha
-                                    </span>
-
-                                <?php endif; ?>
-
-                            </td>
-
-
-                            <!-- EQUIPO -->
-                            <td>
-
-                                <?php if ($jugadore->hasValue('equipo')): ?>
-
-                                    <span class="team-badge">
-                                        🛡️
-                                        <?= h($jugadore->equipo->nombre) ?>
-                                    </span>
-
-                                <?php else: ?>
-
-                                    <span class="muted-value">
-                                        Sin equipo
-                                    </span>
-
-                                <?php endif; ?>
-
-                            </td>
-
-
-                            <!-- CREATED -->
-                            <td>
-
-                                <?php if (!empty($jugadore->created)): ?>
-
-                                    <?= h(
-                                        $jugadore
-                                            ->created
-                                            ->format('d/m/Y')
-                                    ) ?>
-
-                                <?php else: ?>
-
-                                    —
-
-                                <?php endif; ?>
-
-                            </td>
-
-
-                            <!-- ACCIONES -->
-                            <td>
-
-                                <div class="crud-actions">
-
-                                    <?= $this->Html->link(
-                                        'Ver',
-                                        [
-                                            'action' => 'view',
-                                            $jugadore->id
-                                        ],
-                                        [
-                                            'class' =>
-                                                'crud-btn crud-btn-view'
-                                        ]
-                                    ) ?>
-
-
-                                    <?= $this->Html->link(
-                                        'Editar',
-                                        [
-                                            'action' => 'edit',
-                                            $jugadore->id
-                                        ],
-                                        [
-                                            'class' =>
-                                                'crud-btn crud-btn-edit'
-                                        ]
-                                    ) ?>
-
-
-                                    <?= $this->Form->postLink(
-                                        'Eliminar',
-                                        [
-                                            'action' => 'delete',
-                                            $jugadore->id
-                                        ],
-                                        [
-                                            'confirm' =>
-                                                '¿Está seguro de eliminar a ' .
-                                                $jugadore->nombres .
-                                                '?',
-
-                                            'class' =>
-                                                'crud-btn crud-btn-delete'
-                                        ]
-                                    ) ?>
-
-                                </div>
-
-                            </td>
-
+                            <th>Jugador</th>
+                            <th>Equipo</th>
+                            <th>Fecha de nacimiento</th>
+                            <th>Inscrito el</th>
+                            <th class="is-right">Acciones</th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($jugadores as $jugadore): ?>
+                            <?php $nombreCompleto = $jugadore->nombres . ' ' . $jugadore->apellidos; ?>
+                            <tr>
+                                <td class="cell-main" data-label="Jugador">
+                                    <div class="who">
+                                        <?= $this->element('avatar', [
+                                            'foto' => $jugadore->fotografia,
+                                            'nombre' => $nombreCompleto,
+                                        ]) ?>
+                                        <div>
+                                            <?= $this->Html->link(
+                                                h($nombreCompleto),
+                                                ['action' => 'view', $jugadore->id],
+                                                ['class' => 'who__name', 'escape' => false]
+                                            ) ?>
+                                            <span class="who__meta">Jugador #<?= $jugadore->id ?></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-label="Equipo">
+                                    <?php if ($jugadore->hasValue('equipo')): ?>
+                                        <span class="tag tag--team">
+                                            <?= $this->element('icon', ['name' => 'shield']) ?>
+                                            <?= h($jugadore->equipo->nombre) ?>
+                                        </span>
+                                    <?php else: ?>
+                                        <span class="muted">Sin equipo</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td data-label="Nacimiento">
+                                    <?= !empty($jugadore->fecha_nacimiento)
+                                        ? h($jugadore->fecha_nacimiento->format('d/m/Y'))
+                                        : '<span class="muted">Sin fecha</span>' ?>
+                                </td>
+                                <td data-label="Inscrito el">
+                                    <?= !empty($jugadore->created)
+                                        ? h($jugadore->created->format('d/m/Y'))
+                                        : '<span class="muted">Sin fecha</span>' ?>
+                                </td>
+                                <td class="cell-actions is-right">
+                                    <?= $this->element('row_actions', [
+                                        'id' => $jugadore->id,
+                                        'confirm' => '¿Eliminar a ' . $jugadore->nombres . '?',
+                                    ]) ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
 
-                    <?php endforeach; ?>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-
-        <!-- MOBILE -->
-        <div class="players-mobile-list">
-
-            <?php foreach ($jugadores as $jugadore): ?>
-
-                <article class="player-mobile-card">
-
-                    <div class="player-mobile-top">
-
-                        <div class="player-mobile-avatar">
-
-                            <?php if (!empty($jugadore->fotografia)): ?>
-
-                                <?= $this->Html->image(
-                                    'jugadores/' .
-                                    $jugadore->fotografia,
-                                    [
-                                        'alt' =>
-                                            'Fotografía de ' .
-                                            $jugadore->nombres
-                                    ]
-                                ) ?>
-
-                            <?php else: ?>
-
-                                <span>
-                                    👤
-                                </span>
-
-                            <?php endif; ?>
-
-                        </div>
-
-
-                        <div class="player-mobile-name">
-
-                            <span class="player-id">
-                                Jugador #<?= $jugadore->id ?>
-                            </span>
-
-                            <h3>
-                                <?= h(
-                                    $jugadore->nombres .
-                                    ' ' .
-                                    $jugadore->apellidos
-                                ) ?>
-                            </h3>
-
-
-                            <?php if ($jugadore->hasValue('equipo')): ?>
-
-                                <span class="team-badge">
-                                    🛡️
-                                    <?= h($jugadore->equipo->nombre) ?>
-                                </span>
-
-                            <?php endif; ?>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="player-mobile-info">
-
-                        <div>
-                            <span>
-                                Fecha de nacimiento
-                            </span>
-
-                            <strong>
-
-                                <?php if (!empty($jugadore->fecha_nacimiento)): ?>
-
-                                    <?= h(
-                                        $jugadore
-                                            ->fecha_nacimiento
-                                            ->format('d/m/Y')
-                                    ) ?>
-
-                                <?php else: ?>
-
-                                    Sin fecha
-
-                                <?php endif; ?>
-
-                            </strong>
-                        </div>
-
-
-                        <div>
-                            <span>
-                                Equipo
-                            </span>
-
-                            <strong>
-                                <?= $jugadore->hasValue('equipo')
-                                    ? h($jugadore->equipo->nombre)
-                                    : 'Sin equipo'
-                                ?>
-                            </strong>
-                        </div>
-
-                    </div>
-
-
-                    <div class="player-mobile-actions">
-
-                        <?= $this->Html->link(
-                            '👁 Ver',
-                            [
-                                'action' => 'view',
-                                $jugadore->id
-                            ],
-                            [
-                                'class' =>
-                                    'mobile-action mobile-view'
-                            ]
-                        ) ?>
-
-
-                        <?= $this->Html->link(
-                            '✏️ Editar',
-                            [
-                                'action' => 'edit',
-                                $jugadore->id
-                            ],
-                            [
-                                'class' =>
-                                    'mobile-action mobile-edit'
-                            ]
-                        ) ?>
-
-
-                        <?= $this->Form->postLink(
-                            '🗑 Eliminar',
-                            [
-                                'action' => 'delete',
-                                $jugadore->id
-                            ],
-                            [
-                                'confirm' =>
-                                    '¿Está seguro de eliminar a ' .
-                                    $jugadore->nombres .
-                                    '?',
-
-                                'class' =>
-                                    'mobile-action mobile-delete'
-                            ]
-                        ) ?>
-
-                    </div>
-
-                </article>
-
-            <?php endforeach; ?>
-
-        </div>
-
-
-        <!-- PAGINACIÓN -->
-        <div class="players-pagination">
-
-            <ul class="pagination">
-
-                <?= $this->Paginator->first('«') ?>
-
-                <?= $this->Paginator->prev('‹') ?>
-
-                <?= $this->Paginator->numbers() ?>
-
-                <?= $this->Paginator->next('›') ?>
-
-                <?= $this->Paginator->last('»') ?>
-
-            </ul>
-
-
-            <p>
-                <?= $this->Paginator->counter(
-                    'Página {{page}} de {{pages}} · {{current}} de {{count}} jugadores'
+            <?= $this->element('pager', ['nombre' => 'jugadores']) ?>
+        <?php else: ?>
+            <div class="empty">
+                <span class="empty__icon"><?= $this->element('icon', ['name' => 'shirt']) ?></span>
+                <p class="empty__title">Todavía no hay jugadores</p>
+                <p class="empty__text">Inscribe al primer jugador y asígnale un equipo.</p>
+                <?= $this->Html->link(
+                    $this->element('icon', ['name' => 'plus']) . 'Inscribir jugador',
+                    ['action' => 'add'],
+                    ['class' => 'btn btn--primary', 'escape' => false]
                 ) ?>
-            </p>
-
-        </div>
-
-    </div>
+            </div>
+        <?php endif; ?>
+    </section>
 
 </div>

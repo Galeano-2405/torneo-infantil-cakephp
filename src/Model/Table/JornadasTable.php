@@ -62,14 +62,14 @@ class JornadasTable extends Table
     {
         $validator
             ->scalar('nombre')
-            ->maxLength('nombre', 100)
-            ->requirePresence('nombre', 'create')
-            ->notEmptyString('nombre');
+            ->maxLength('nombre', 100, 'El nombre no puede pasar de 100 caracteres.')
+            ->requirePresence('nombre', 'create', 'Debe ingresar el nombre de la jornada.')
+            ->notEmptyString('nombre', 'Debe ingresar el nombre de la jornada.');
 
         $validator
-            ->date('fecha')
-            ->requirePresence('fecha', 'create')
-            ->notEmptyDate('fecha');
+            ->date('fecha', ['ymd'], 'Ingrese una fecha válida.')
+            ->requirePresence('fecha', 'create', 'Debe ingresar la fecha de la jornada.')
+            ->notEmptyDate('fecha', 'Debe ingresar la fecha de la jornada.');
 
         return $validator;
     }

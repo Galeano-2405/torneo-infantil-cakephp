@@ -5,167 +5,63 @@
  * @var \Cake\Collection\CollectionInterface|string[] $equipos
  */
 ?>
+<div class="reveal">
 
-<div class="form-page">
+    <?= $this->element('page_head', [
+        'title' => 'Inscribir jugador',
+        'lead' => 'Registra los datos del jugador, su equipo y una fotografía.',
+        'icon' => 'shirt',
+        'tone' => 'blue',
+    ]) ?>
 
-    <div class="form-header">
-
-        <div>
-
-            <div class="form-kicker">
-                Registro de jugador
-            </div>
-
-            <h1>
-                Nuevo jugador
-            </h1>
-
-            <p>
-                Registra los datos generales y fotografía del jugador.
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div class="form-card">
-
-        <div class="form-card-top">
-
-            <h3>
-                Información del jugador
-            </h3>
-
-            <p>
-                Complete los campos requeridos para crear el registro.
-            </p>
-
-        </div>
-
-
-        <?= $this->Form->create(
-            $jugadore,
-            ['type' => 'file']
-        ) ?>
-
-
-        <div class="form-card-body">
-
-            <div class="form-grid">
-
-                <div class="form-group">
-
-                    <?= $this->Form->control(
-                        'nombres',
-                        [
+    <section class="panel form-panel">
+        <?= $this->Form->create($jugadore, ['type' => 'file']) ?>
+            <div class="form-section">
+                <div>
+                    <h2 class="form-section__title">Datos personales</h2>
+                    <p class="form-section__text">Tal como aparecen en el documento del jugador.</p>
+                </div>
+                <div class="form-grid">
+                    <div class="field">
+                        <?= $this->Form->control('nombres', [
                             'label' => 'Nombres',
-                            'placeholder' => 'Ingrese los nombres'
-                        ]
-                    ) ?>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <?= $this->Form->control(
-                        'apellidos',
-                        [
+                            'placeholder' => 'Ejemplo: Ana Lucía',
+                            'autofocus' => true,
+                        ]) ?>
+                    </div>
+                    <div class="field">
+                        <?= $this->Form->control('apellidos', [
                             'label' => 'Apellidos',
-                            'placeholder' => 'Ingrese los apellidos'
-                        ]
-                    ) ?>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <?= $this->Form->control(
-                        'fecha_nacimiento',
-                        [
-                            'label' => 'Fecha de nacimiento'
-                        ]
-                    ) ?>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <?= $this->Form->control(
-                        'equipo_id',
-                        [
+                            'placeholder' => 'Ejemplo: Pérez López',
+                        ]) ?>
+                    </div>
+                    <div class="field">
+                        <?= $this->Form->control('fecha_nacimiento', [
+                            'label' => 'Fecha de nacimiento',
+                        ]) ?>
+                    </div>
+                    <div class="field">
+                        <?= $this->Form->control('equipo_id', [
                             'label' => 'Equipo',
                             'options' => $equipos,
-                            'empty' => 'Seleccione un equipo'
-                        ]
-                    ) ?>
-
-                </div>
-
-
-                <div class="form-group full-width">
-
-                    <label>
-                        Fotografía
-                    </label>
-
-                    <div class="file-box">
-
-                        <?= $this->Form->control(
-                            'fotografia',
-                            [
-                                'type' => 'file',
-                                'label' => false,
-                                'accept' =>
-                                    'image/jpeg,image/png,image/jpg'
-                            ]
-                        ) ?>
-
+                            'empty' => 'Selecciona un equipo',
+                        ]) ?>
                     </div>
-
-                    <span class="form-help">
-                        Formatos permitidos: JPG, JPEG y PNG.
-                    </span>
-
                 </div>
-
             </div>
 
-        </div>
-
-
-        <div class="form-card-footer">
-
-            <?= $this->Html->link(
-                '← Volver a jugadores',
-                [
-                    'action' => 'index'
-                ],
-                [
-                    'class' => 'form-secondary-button'
-                ]
-            ) ?>
-
-
-            <div class="form-actions">
-
-                <?= $this->Form->button(
-                    'Guardar jugador',
-                    [
-                        'class' => 'button'
-                    ]
-                ) ?>
-
+            <div class="form-section">
+                <div>
+                    <h2 class="form-section__title">Fotografía</h2>
+                    <p class="form-section__text">El árbitro la usa para identificar al jugador el día del partido.</p>
+                </div>
+                <div class="form-grid">
+                    <?= $this->element('photo_dropzone', ['campo' => 'fotografia', 'titulo' => 'Foto del jugador']) ?>
+                </div>
             </div>
 
-        </div>
-
-
+            <?= $this->element('form_bar', ['volver' => 'Volver a jugadores', 'guardar' => 'Inscribir jugador']) ?>
         <?= $this->Form->end() ?>
-
-    </div>
+    </section>
 
 </div>

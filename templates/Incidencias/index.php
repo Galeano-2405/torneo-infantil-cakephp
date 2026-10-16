@@ -4,526 +4,121 @@
  * @var iterable<\App\Model\Entity\Incidencia> $incidencias
  */
 ?>
+<div class="reveal">
 
-<div class="incidents-page">
+    <?= $this->element('page_head', [
+        'title' => 'Incidencias',
+        'lead' => 'Tarjetas amarillas, rojas y suspensiones de los jugadores.',
+        'icon' => 'card',
+        'tone' => 'red',
+        'actions' =>
+            $this->Html->link(
+                $this->element('icon', ['name' => 'clipboard']) . 'Ver reporte',
+                ['action' => 'reporte'],
+                ['class' => 'btn btn--ghost', 'escape' => false]
+            ) .
+            $this->Html->link(
+                $this->element('icon', ['name' => 'plus']) . 'Nueva incidencia',
+                ['action' => 'add'],
+                ['class' => 'btn btn--primary', 'escape' => false]
+            ),
+    ]) ?>
 
-    <!-- HEADER -->
-    <div class="incidents-header">
-
-        <div>
-            <div class="incidents-kicker">
-                Control disciplinario
-            </div>
-
-            <h1>
-                Incidencias
-            </h1>
-
-            <p>
-                Administra tarjetas, faltas y suspensiones de los jugadores.
-            </p>
+    <section class="panel">
+        <div class="panel__head">
+            <h2 class="panel__title">Historial disciplinario</h2>
+            <span class="count-chip"><strong><?= $this->Paginator->param('count') ?? count($incidencias) ?></strong> incidencias</span>
         </div>
 
-        <div class="incidents-header-actions">
-
-            <?= $this->Html->link(
-                '＋ Nueva incidencia',
-                [
-                    'controller' => 'Incidencias',
-                    'action' => 'add'
-                ],
-                [
-                    'class' => 'button'
-                ]
-            ) ?>
-
-        </div>
-
-    </div>
-
-
-    <!-- RESUMEN -->
-    <div class="incidents-summary">
-
-        <div class="incidents-summary-card">
-
-            <div class="incidents-summary-icon">
-                📋
-            </div>
-
-            <div>
-                <strong>
-                    <?= count($incidencias) ?>
-                </strong>
-
-                <span>
-                    Incidencias mostradas
-                </span>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- TABLA -->
-    <div class="incidents-table-card">
-
-        <div class="incidents-table-top">
-
-            <div>
-                <h3>
-                    Historial disciplinario
-                </h3>
-
-                <p>
-                    Registro general de tarjetas y suspensiones.
-                </p>
-            </div>
-
-        </div>
-
-
-        <div class="table-responsive incidents-desktop-table">
-
-            <table class="incidents-table">
-
-                <thead>
-                    <tr>
-                        <th>Jugador</th>
-                        <th>Descripción</th>
-                        <th>Tarjeta</th>
-                        <th>Fecha incidencia</th>
-                        <th>Suspensión</th>
-                        <th class="incidents-actions-column">
-                            Acciones
-                        </th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    <?php foreach ($incidencias as $incidencia): ?>
-
+        <?php if (count($incidencias) > 0): ?>
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
                         <tr>
-
-                            <!-- JUGADOR -->
-                            <td>
-
-                                <div class="incident-player-cell">
-
-                                    <div class="incident-player-avatar">
-
-                                        <?php if (
-                                            !empty(
-                                                $incidencia
-                                                    ->jugador
-                                                    ->fotografia
-                                            )
-                                        ): ?>
-
-                                            <?= $this->Html->image(
-                                                'jugadores/' .
-                                                $incidencia
-                                                    ->jugador
-                                                    ->fotografia,
-                                                [
-                                                    'alt' =>
-                                                        'Fotografía de ' .
-                                                        $incidencia
-                                                            ->jugador
-                                                            ->nombres
-                                                ]
-                                            ) ?>
-
-                                        <?php else: ?>
-
-                                            <span>
-                                                👤
-                                            </span>
-
-                                        <?php endif; ?>
-
-                                    </div>
-
-
-                                    <div class="incident-player-info">
-
-                                        <strong>
-                                            <?= h(
-                                                $incidencia
-                                                    ->jugador
-                                                    ->nombres .
-                                                ' ' .
-                                                $incidencia
-                                                    ->jugador
-                                                    ->apellidos
-                                            ) ?>
-                                        </strong>
-
-                                        <span>
-                                            Jugador #<?= $incidencia->jugador_id ?>
-                                        </span>
-
-                                    </div>
-
-                                </div>
-
-                            </td>
-
-
-                            <!-- DESCRIPCIÓN -->
-                            <td>
-                                <?= h($incidencia->descripcion) ?>
-                            </td>
-
-
-                            <!-- TARJETA -->
-                            <td>
-
-                                <?php if ($incidencia->tipo_tarjeta === 'Roja'): ?>
-
-                                    <span class="card-badge card-red">
-                                        🟥 Roja
-                                    </span>
-
-                                <?php else: ?>
-
-                                    <span class="card-badge card-yellow">
-                                        🟨 Amarilla
-                                    </span>
-
-                                <?php endif; ?>
-
-                            </td>
-
-
-                            <!-- FECHA INCIDENCIA -->
-                            <td>
-
-                                <?php if (!empty($incidencia->fecha_incidencia)): ?>
-
-                                    <?= h(
-                                        $incidencia
-                                            ->fecha_incidencia
-                                            ->format('d/m/Y')
-                                    ) ?>
-
-                                <?php else: ?>
-
-                                    —
-
-                                <?php endif; ?>
-
-                            </td>
-
-
-                            <!-- SUSPENSIÓN -->
-                            <td>
-
-                                <?php if (!empty($incidencia->fecha_suspension)): ?>
-
-                                    <span class="suspension-badge">
-                                        ⛔
-                                        <?= h(
-                                            $incidencia
-                                                ->fecha_suspension
-                                                ->format('d/m/Y')
-                                        ) ?>
-                                    </span>
-
-                                <?php else: ?>
-
-                                    <span class="no-suspension">
-                                        No aplica
-                                    </span>
-
-                                <?php endif; ?>
-
-                            </td>
-
-
-                            <!-- ACCIONES -->
-                            <td>
-
-                                <div class="crud-actions">
-
-                                    <?= $this->Html->link(
-                                        '👁 Ver',
-                                        [
-                                            'action' => 'view',
-                                            $incidencia->id
-                                        ],
-                                        [
-                                            'class' =>
-                                                'crud-btn crud-btn-view'
-                                        ]
-                                    ) ?>
-
-
-                                    <?= $this->Html->link(
-                                        '✏️ Editar',
-                                        [
-                                            'action' => 'edit',
-                                            $incidencia->id
-                                        ],
-                                        [
-                                            'class' =>
-                                                'crud-btn crud-btn-edit'
-                                        ]
-                                    ) ?>
-
-
-                                    <?= $this->Form->postLink(
-                                        '🗑 Eliminar',
-                                        [
-                                            'action' => 'delete',
-                                            $incidencia->id
-                                        ],
-                                        [
-                                            'confirm' =>
-                                                '¿Está seguro de eliminar esta incidencia?',
-
-                                            'class' =>
-                                                'crud-btn crud-btn-delete'
-                                        ]
-                                    ) ?>
-
-                                </div>
-
-                            </td>
-
+                            <th>Jugador</th>
+                            <th>Tarjeta</th>
+                            <th>Motivo</th>
+                            <th>Fecha</th>
+                            <th>Suspendido para</th>
+                            <th class="is-right">Acciones</th>
                         </tr>
-
-                    <?php endforeach; ?>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-
-        <!-- MOBILE -->
-        <div class="incidents-mobile-list">
-
-            <?php foreach ($incidencias as $incidencia): ?>
-
-                <article class="incident-mobile-card">
-
-                    <div class="incident-mobile-top">
-
-                        <div class="incident-mobile-avatar">
-
-                            <?php if (
-                                !empty(
-                                    $incidencia
-                                        ->jugador
-                                        ->fotografia
-                                )
-                            ): ?>
-
-                                <?= $this->Html->image(
-                                    'jugadores/' .
-                                    $incidencia
-                                        ->jugador
-                                        ->fotografia,
-                                    [
-                                        'alt' =>
-                                            'Fotografía de ' .
-                                            $incidencia
-                                                ->jugador
-                                                ->nombres
-                                    ]
-                                ) ?>
-
-                            <?php else: ?>
-
-                                <span>
-                                    👤
-                                </span>
-
-                            <?php endif; ?>
-
-                        </div>
-
-
-                        <div class="incident-mobile-name">
-
-                            <span class="incident-id">
-                                Incidencia #<?= $incidencia->id ?>
-                            </span>
-
-                            <h3>
-                                <?= h(
-                                    $incidencia
-                                        ->jugador
-                                        ->nombres .
-                                    ' ' .
-                                    $incidencia
-                                        ->jugador
-                                        ->apellidos
-                                ) ?>
-                            </h3>
-
-
-                            <?php if ($incidencia->tipo_tarjeta === 'Roja'): ?>
-
-                                <span class="card-badge card-red">
-                                    🟥 Roja
-                                </span>
-
-                            <?php else: ?>
-
-                                <span class="card-badge card-yellow">
-                                    🟨 Amarilla
-                                </span>
-
-                            <?php endif; ?>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="incident-mobile-description">
-
-                        <span>
-                            Descripción
-                        </span>
-
-                        <strong>
-                            <?= h($incidencia->descripcion) ?>
-                        </strong>
-
-                    </div>
-
-
-                    <div class="incident-mobile-info">
-
-                        <div>
-                            <span>
-                                Fecha incidencia
-                            </span>
-
-                            <strong>
-                                <?= !empty($incidencia->fecha_incidencia)
-                                    ? h(
-                                        $incidencia
-                                            ->fecha_incidencia
-                                            ->format('d/m/Y')
-                                    )
-                                    : 'Sin fecha'
-                                ?>
-                            </strong>
-                        </div>
-
-
-                        <div>
-                            <span>
-                                Suspensión
-                            </span>
-
-                            <strong>
-
-                                <?php if (!empty($incidencia->fecha_suspension)): ?>
-
-                                    <?= h(
-                                        $incidencia
-                                            ->fecha_suspension
-                                            ->format('d/m/Y')
-                                    ) ?>
-
-                                <?php else: ?>
-
-                                    No aplica
-
-                                <?php endif; ?>
-
-                            </strong>
-                        </div>
-
-                    </div>
-
-
-                    <div class="incident-mobile-actions">
-
-                        <?= $this->Html->link(
-                            '👁 Ver',
-                            [
-                                'action' => 'view',
-                                $incidencia->id
-                            ],
-                            [
-                                'class' =>
-                                    'mobile-action mobile-view'
-                            ]
-                        ) ?>
-
-
-                        <?= $this->Html->link(
-                            '✏️ Editar',
-                            [
-                                'action' => 'edit',
-                                $incidencia->id
-                            ],
-                            [
-                                'class' =>
-                                    'mobile-action mobile-edit'
-                            ]
-                        ) ?>
-
-
-                        <?= $this->Form->postLink(
-                            '🗑 Eliminar',
-                            [
-                                'action' => 'delete',
-                                $incidencia->id
-                            ],
-                            [
-                                'confirm' =>
-                                    '¿Está seguro de eliminar esta incidencia?',
-
-                                'class' =>
-                                    'mobile-action mobile-delete'
-                            ]
-                        ) ?>
-
-                    </div>
-
-                </article>
-
-            <?php endforeach; ?>
-
-        </div>
-
-
-        <!-- PAGINACIÓN -->
-        <div class="incidents-pagination">
-
-            <ul class="pagination">
-
-                <?= $this->Paginator->first('«') ?>
-
-                <?= $this->Paginator->prev('‹') ?>
-
-                <?= $this->Paginator->numbers() ?>
-
-                <?= $this->Paginator->next('›') ?>
-
-                <?= $this->Paginator->last('»') ?>
-
-            </ul>
-
-
-            <p>
-                <?= $this->Paginator->counter(
-                    'Página {{page}} de {{pages}} · {{current}} de {{count}} incidencias'
+                    </thead>
+                    <tbody>
+                        <?php foreach ($incidencias as $incidencia): ?>
+                            <?php
+                            $jugador = $incidencia->jugador ?? null;
+                            $nombreCompleto = $jugador
+                                ? $jugador->nombres . ' ' . $jugador->apellidos
+                                : 'Jugador #' . $incidencia->jugador_id;
+                            $esRoja = $incidencia->tipo_tarjeta === 'Roja';
+                            ?>
+                            <tr>
+                                <td class="cell-main" data-label="Jugador">
+                                    <div class="who">
+                                        <?= $this->element('avatar', [
+                                            'foto' => $jugador->fotografia ?? null,
+                                            'nombre' => $nombreCompleto,
+                                        ]) ?>
+                                        <div>
+                                            <?= $this->Html->link(
+                                                h($nombreCompleto),
+                                                ['controller' => 'Jugadores', 'action' => 'view', $incidencia->jugador_id],
+                                                ['class' => 'who__name', 'escape' => false]
+                                            ) ?>
+                                            <span class="who__meta">
+                                                <?= !empty($jugador->equipo) ? h($jugador->equipo->nombre) : 'Sin equipo' ?>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-label="Tarjeta">
+                                    <span class="ref-card ref-card--<?= $esRoja ? 'roja' : 'amarilla' ?>">
+                                        <?= $esRoja ? 'Roja' : 'Amarilla' ?>
+                                    </span>
+                                </td>
+                                <td class="cell-block" data-label="Motivo">
+                                    <?= h($incidencia->descripcion) ?>
+                                </td>
+                                <td data-label="Fecha">
+                                    <?= !empty($incidencia->fecha_incidencia)
+                                        ? h($incidencia->fecha_incidencia->format('d/m/Y'))
+                                        : '<span class="muted">Sin fecha</span>' ?>
+                                </td>
+                                <td data-label="Suspendido para">
+                                    <?php if (!empty($incidencia->fecha_suspension)): ?>
+                                        <span class="tag tag--ban">
+                                            <?= $this->element('icon', ['name' => 'ban']) ?>
+                                            <?= h($incidencia->fecha_suspension->format('d/m/Y')) ?>
+                                        </span>
+                                    <?php else: ?>
+                                        <span class="muted">Sin suspensión</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="cell-actions is-right">
+                                    <?= $this->element('row_actions', [
+                                        'id' => $incidencia->id,
+                                        'confirm' => '¿Eliminar esta incidencia?',
+                                    ]) ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <?= $this->element('pager', ['nombre' => 'incidencias']) ?>
+        <?php else: ?>
+            <div class="empty">
+                <span class="empty__icon"><?= $this->element('icon', ['name' => 'card']) ?></span>
+                <p class="empty__title">Sin incidencias registradas</p>
+                <p class="empty__text">Cuando un jugador reciba una tarjeta, regístrala aquí.</p>
+                <?= $this->Html->link(
+                    $this->element('icon', ['name' => 'plus']) . 'Nueva incidencia',
+                    ['action' => 'add'],
+                    ['class' => 'btn btn--primary', 'escape' => false]
                 ) ?>
-            </p>
-
-        </div>
-
-    </div>
+            </div>
+        <?php endif; ?>
+    </section>
 
 </div>

@@ -3,398 +3,140 @@
  * @var \App\View\AppView $this
  * @var iterable $goleadores
  */
+
+$lista = [];
+foreach ($goleadores as $g) {
+    $lista[] = $g;
+}
+$maximo = 0;
+foreach ($lista as $g) {
+    $maximo = max($maximo, (int)$g->total_goles);
+}
+$podio = array_slice($lista, 0, 3);
+/* Orden visual del podio: 2.º, 1.º, 3.º */
+$ordenPodio = array_filter([1 => $podio[1] ?? null, 0 => $podio[0] ?? null, 2 => $podio[2] ?? null]);
 ?>
+<div class="reveal">
 
-<div class="scorers-page">
+    <?= $this->element('page_head', [
+        'title' => 'Tabla de goleadores',
+        'lead' => 'Jugadores ordenados por la cantidad de goles anotados en el torneo.',
+        'icon' => 'trophy',
+        'tone' => 'gold',
+        'actions' =>
+            $this->Html->link(
+                $this->element('icon', ['name' => 'arrow-left']) . 'Goles',
+                ['controller' => 'Goles', 'action' => 'index'],
+                ['class' => 'btn btn--ghost', 'escape' => false]
+            ) .
+            $this->Html->link(
+                $this->element('icon', ['name' => 'plus']) . 'Registrar goles',
+                ['controller' => 'Goles', 'action' => 'add'],
+                ['class' => 'btn btn--primary', 'escape' => false]
+            ),
+    ]) ?>
 
-    <!-- HEADER -->
-    <div class="report-page-header">
-
-        <div>
-
-            <div class="report-kicker">
-                Estadísticas del torneo
+    <section class="panel">
+        <?php if (!empty($lista)): ?>
+            <div class="podium" aria-label="Podio de goleadores">
+                <?php foreach ($ordenPodio as $indice => $goleador): ?>
+                    <?php
+                    $puesto = $indice + 1;
+                    $nombreCompleto = $goleador->nombres . ' ' . $goleador->apellidos;
+                    $total = (int)$goleador->total_goles;
+                    ?>
+                    <div class="podium__place podium__place--<?= $puesto ?>">
+                        <?= $this->element('avatar', [
+                            'foto' => $goleador->fotografia,
+                            'nombre' => $nombreCompleto,
+                            'size' => 'lg',
+                        ]) ?>
+                        <span class="podium__name">
+                            <?= $this->Html->link(
+                                h($nombreCompleto),
+                                ['controller' => 'Jugadores', 'action' => 'view', $goleador->jugador_id],
+                                ['escape' => false, 'style' => 'color:inherit']
+                            ) ?>
+                        </span>
+                        <span class="podium__team"><?= !empty($goleador->equipo) ? h($goleador->equipo) : 'Sin equipo' ?></span>
+                        <div class="podium__step">
+                            <span class="podium__rank"><?= $puesto ?>.º</span>
+                            <span class="podium__goals"><?= $total ?> <small><?= $total === 1 ? 'gol' : 'goles' ?></small></span>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
 
-            <h1>
-                Reporte de Goleadores
-            </h1>
-
-            <p>
-                Ranking general de jugadores según la cantidad de goles anotados.
-            </p>
-
-        </div>
-
-        <div class="report-header-actions">
-
-            <?= $this->Html->link(
-                '← Volver a goles',
-                [
-                    'controller' => 'Goles',
-                    'action' => 'index'
-                ],
-                [
-                    'class' => 'form-secondary-button'
-                ]
-            ) ?>
-
-        </div>
-
-    </div>
-
-
-    <!-- HERO -->
-    <section class="scorers-hero">
-
-        <div>
-
-            <span class="scorers-hero-badge">
-                🏆 Clasificación
-            </span>
-
-            <h2>
-                Máximos goleadores
-            </h2>
-
-            <p>
-                Consulta el rendimiento ofensivo de los jugadores participantes.
-            </p>
-
-        </div>
-
-        <div class="scorers-hero-ball">
-            ⚽
-        </div>
-
-    </section>
-
-
-    <!-- RANKING -->
-    <section class="report-card">
-
-        <div class="report-card-header">
-
-            <div>
-
-                <h3>
-                    Tabla de goleadores
-                </h3>
-
-                <p>
-                    Ordenada de mayor a menor cantidad de goles.
-                </p>
-
+            <div class="panel__head">
+                <h2 class="panel__title">Clasificación completa</h2>
+                <span class="count-chip"><strong><?= count($lista) ?></strong> jugadores con goles</span>
             </div>
 
-        </div>
-
-
-        <?php if (!empty($goleadores)): ?>
-
-            <!-- =====================================================
-                 DESKTOP
-                 ===================================================== -->
-
-            <div class="scorers-desktop">
-
-                <table class="scorers-table">
-
+            <div class="table-wrap">
+                <table class="data-table">
                     <thead>
-
                         <tr>
-                            <th>Posición</th>
+                            <th>Puesto</th>
                             <th>Jugador</th>
                             <th>Equipo</th>
-                            <th>Total de goles</th>
+                            <th>Goles</th>
                         </tr>
-
                     </thead>
-
                     <tbody>
-
-                        <?php $posicion = 1; ?>
-
-                        <?php foreach ($goleadores as $goleador): ?>
-
+                        <?php foreach ($lista as $i => $goleador): ?>
+                            <?php
+                            $puesto = $i + 1;
+                            $nombreCompleto = $goleador->nombres . ' ' . $goleador->apellidos;
+                            $total = (int)$goleador->total_goles;
+                            $ancho = $maximo > 0 ? round($total / $maximo * 100) : 0;
+                            ?>
                             <tr>
-
-                                <!-- POSICIÓN -->
-                                <td>
-
-                                    <div class="
-                                        scorer-position
-                                        <?= $posicion === 1 ? 'position-first' : '' ?>
-                                        <?= $posicion === 2 ? 'position-second' : '' ?>
-                                        <?= $posicion === 3 ? 'position-third' : '' ?>
-                                    ">
-
-                                        <?php if ($posicion === 1): ?>
-
-                                            🥇
-
-                                        <?php elseif ($posicion === 2): ?>
-
-                                            🥈
-
-                                        <?php elseif ($posicion === 3): ?>
-
-                                            🥉
-
-                                        <?php else: ?>
-
-                                            <?= $posicion ?>
-
-                                        <?php endif; ?>
-
-                                    </div>
-
+                                <td data-label="Puesto">
+                                    <span class="rank <?= $puesto <= 3 ? 'rank--' . $puesto : '' ?>"><?= $puesto ?></span>
                                 </td>
-
-
-                                <!-- JUGADOR -->
-                                <td>
-
-                                    <div class="scorer-player">
-
-                                        <div class="scorer-avatar">
-
-                                            <?php if (!empty($goleador->fotografia)): ?>
-
-                                                <?= $this->Html->image(
-                                                    'jugadores/' .
-                                                    $goleador->fotografia,
-                                                    [
-                                                        'alt' =>
-                                                            'Fotografía de ' .
-                                                            $goleador->nombres
-                                                    ]
-                                                ) ?>
-
-                                            <?php else: ?>
-
-                                                👤
-
-                                            <?php endif; ?>
-
-                                        </div>
-
-
+                                <td class="cell-main" data-label="Jugador">
+                                    <div class="who">
+                                        <?= $this->element('avatar', ['foto' => $goleador->fotografia, 'nombre' => $nombreCompleto]) ?>
                                         <div>
-
-                                            <strong>
-                                                <?= h(
-                                                    $goleador->nombres .
-                                                    ' ' .
-                                                    $goleador->apellidos
-                                                ) ?>
-                                            </strong>
-
-                                            <span>
-                                                Jugador #<?= h($goleador->jugador_id) ?>
-                                            </span>
-
+                                            <?= $this->Html->link(
+                                                h($nombreCompleto),
+                                                ['controller' => 'Jugadores', 'action' => 'view', $goleador->jugador_id],
+                                                ['class' => 'who__name', 'escape' => false]
+                                            ) ?>
+                                            <span class="who__meta">Jugador #<?= h($goleador->jugador_id) ?></span>
                                         </div>
-
                                     </div>
-
                                 </td>
-
-
-                                <!-- EQUIPO -->
-                                <td>
-
+                                <td data-label="Equipo">
                                     <?php if (!empty($goleador->equipo)): ?>
-
-                                        <span class="team-badge">
-
-                                            🛡️
-
-                                            <?= h($goleador->equipo) ?>
-
-                                        </span>
-
+                                        <span class="tag tag--team"><?= $this->element('icon', ['name' => 'shield']) ?><?= h($goleador->equipo) ?></span>
                                     <?php else: ?>
-
-                                        <span class="muted-value">
-                                            Sin equipo
-                                        </span>
-
+                                        <span class="muted">Sin equipo</span>
                                     <?php endif; ?>
-
                                 </td>
-
-
-                                <!-- GOLES -->
-                                <td>
-
-                                    <span class="scorer-goals">
-
-                                        ⚽
-
-                                        <?= h($goleador->total_goles) ?>
-
-                                        <?= (int)$goleador->total_goles === 1
-                                            ? 'gol'
-                                            : 'goles'
-                                        ?>
-
-                                    </span>
-
+                                <td data-label="Goles">
+                                    <div class="bar">
+                                        <span class="bar__track"><span class="bar__fill" style="--w: <?= $ancho ?>%"></span></span>
+                                        <span class="bar__value"><?= $total ?></span>
+                                    </div>
                                 </td>
-
                             </tr>
-
-                            <?php $posicion++; ?>
-
                         <?php endforeach; ?>
-
                     </tbody>
-
                 </table>
-
             </div>
-
-
-            <!-- =====================================================
-                 MOBILE
-                 ===================================================== -->
-
-            <div class="scorers-mobile">
-
-                <?php $posicion = 1; ?>
-
-                <?php foreach ($goleadores as $goleador): ?>
-
-                    <article class="scorer-mobile-card">
-
-                        <div class="scorer-mobile-rank">
-
-                            <?php if ($posicion === 1): ?>
-
-                                🥇
-
-                            <?php elseif ($posicion === 2): ?>
-
-                                🥈
-
-                            <?php elseif ($posicion === 3): ?>
-
-                                🥉
-
-                            <?php else: ?>
-
-                                #<?= $posicion ?>
-
-                            <?php endif; ?>
-
-                        </div>
-
-
-                        <div class="scorer-mobile-main">
-
-                            <div class="scorer-mobile-avatar">
-
-                                <?php if (!empty($goleador->fotografia)): ?>
-
-                                    <?= $this->Html->image(
-                                        'jugadores/' .
-                                        $goleador->fotografia,
-                                        [
-                                            'alt' =>
-                                                'Fotografía de ' .
-                                                $goleador->nombres
-                                        ]
-                                    ) ?>
-
-                                <?php else: ?>
-
-                                    👤
-
-                                <?php endif; ?>
-
-                            </div>
-
-
-                            <div class="scorer-mobile-name">
-
-                                <span>
-                                    Posición <?= $posicion ?>
-                                </span>
-
-                                <h3>
-                                    <?= h(
-                                        $goleador->nombres .
-                                        ' ' .
-                                        $goleador->apellidos
-                                    ) ?>
-                                </h3>
-
-
-                                <?php if (!empty($goleador->equipo)): ?>
-
-                                    <span class="team-badge">
-
-                                        🛡️
-
-                                        <?= h($goleador->equipo) ?>
-
-                                    </span>
-
-                                <?php else: ?>
-
-                                    <span class="muted-value">
-                                        Sin equipo
-                                    </span>
-
-                                <?php endif; ?>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="scorer-mobile-total">
-
-                            <span>
-                                Total de goles
-                            </span>
-
-                            <strong>
-                                ⚽ <?= h($goleador->total_goles) ?>
-                            </strong>
-
-                        </div>
-
-                    </article>
-
-                    <?php $posicion++; ?>
-
-                <?php endforeach; ?>
-
-            </div>
-
-
         <?php else: ?>
-
-            <div class="profile-empty-state">
-
-                <div>
-                    🏆
-                </div>
-
-                <strong>
-                    Sin goleadores
-                </strong>
-
-                <span>
-                    Todavía no existen goles registrados.
-                </span>
-
+            <div class="empty">
+                <span class="empty__icon"><?= $this->element('icon', ['name' => 'trophy']) ?></span>
+                <p class="empty__title">La tabla está vacía</p>
+                <p class="empty__text">Registra los goles de una jornada y aquí aparecerá el ranking.</p>
+                <?= $this->Html->link(
+                    $this->element('icon', ['name' => 'plus']) . 'Registrar goles',
+                    ['controller' => 'Goles', 'action' => 'add'],
+                    ['class' => 'btn btn--primary', 'escape' => false]
+                ) ?>
             </div>
-
         <?php endif; ?>
-
     </section>
 
 </div>

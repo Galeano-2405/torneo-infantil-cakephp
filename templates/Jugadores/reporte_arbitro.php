@@ -6,467 +6,141 @@
  * @var array $equiposReporte
  * @var array $suspendidos
  */
+
+$meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+
+/* Conteo de habilitados y suspendidos (solo para mostrar) */
+$totalJugadores = 0;
+$totalSuspendidos = 0;
+foreach ($equiposReporte as $jugadoresEquipo) {
+    foreach ($jugadoresEquipo as $j) {
+        $totalJugadores++;
+        if (!empty($suspendidos[(int)$j->id])) {
+            $totalSuspendidos++;
+        }
+    }
+}
 ?>
+<div class="reveal">
 
-<div class="referee-report-page">
+    <?= $this->element('page_head', [
+        'title' => 'Reporte para árbitro',
+        'lead' => 'Elige una jornada para ver qué jugadores pueden jugar y quiénes están suspendidos.',
+        'icon' => 'whistle',
+        'actions' => !empty($jornadaSeleccionada)
+            ? '<button type="button" class="btn btn--ghost" onclick="window.print()">' . $this->element('icon', ['name' => 'clipboard']) . 'Imprimir planilla</button>'
+            : null,
+    ]) ?>
 
-    <!-- HEADER -->
-    <div class="report-page-header">
-
-        <div>
-
-            <div class="report-kicker">
-                Control de participación
-            </div>
-
-            <h1>
-                Reporte para Árbitro
-            </h1>
-
-            <p>
-                Consulta los jugadores habilitados o suspendidos por jornada.
-            </p>
-
-        </div>
-
-        <div class="report-header-actions">
-
-            <?= $this->Html->link(
-                '← Volver a jugadores',
-                [
-                    'controller' => 'Jugadores',
-                    'action' => 'index'
-                ],
-                [
-                    'class' => 'form-secondary-button'
-                ]
-            ) ?>
-
-        </div>
-
-    </div>
-
-
-    <!-- HERO -->
-    <section class="referee-hero">
-
-        <div>
-
-            <span class="referee-hero-badge">
-                ⚖️ Control arbitral
-            </span>
-
-            <h2>
-                Validación de jugadores
-            </h2>
-
-            <p>
-                Selecciona una jornada para conocer qué jugadores pueden participar.
-            </p>
-
-        </div>
-
-        <div class="referee-hero-icon">
-            🧑‍⚖️
-        </div>
-
-    </section>
-
-
-    <!-- SELECTOR -->
-    <section class="report-filter-card">
-
-        <div class="report-filter-header">
-
-            <div>
-                <h3>
-                    Seleccione la jornada
-                </h3>
-
-                <p>
-                    Consulta el estado disciplinario correspondiente a esa fecha.
-                </p>
-            </div>
-
-        </div>
-
-
-        <?= $this->Form->create(
-            null,
-            [
+    <section class="panel filter-panel">
+        <div class="panel__body">
+            <?= $this->Form->create(null, [
                 'type' => 'get',
-                'url' => [
-                    'controller' => 'Jugadores',
-                    'action' => 'reporteArbitro'
-                ]
-            ]
-        ) ?>
-
-        <div class="report-filter-body">
-
-            <div class="report-filter-grid">
-
-                <div class="form-group">
-
-                    <?= $this->Form->control(
-                        'jornada_id',
-                        [
-                            'label' => 'Jornada',
-                            'options' => $jornadas,
-                            'empty' => 'Seleccione una jornada',
-                            'value' => $this->request->getQuery('jornada_id')
-                        ]
-                    ) ?>
-
+                'url' => ['controller' => 'Jugadores', 'action' => 'reporteArbitro'],
+            ]) ?>
+                <div class="filter-bar">
+                    <?= $this->Form->control('jornada_id', [
+                        'label' => 'Jornada',
+                        'options' => $jornadas,
+                        'empty' => 'Selecciona una jornada',
+                        'value' => $this->request->getQuery('jornada_id'),
+                    ]) ?>
+                    <div class="filter-bar__actions">
+                        <?= $this->Form->button(
+                            $this->element('icon', ['name' => 'search']) . 'Consultar jornada',
+                            ['class' => 'btn btn--primary', 'escapeTitle' => false, 'type' => 'submit']
+                        ) ?>
+                    </div>
                 </div>
-
-                <div class="report-filter-action">
-
-                    <?= $this->Form->button(
-                        'Consultar jornada',
-                        [
-                            'class' => 'button'
-                        ]
-                    ) ?>
-
-                </div>
-
-            </div>
-
+            <?= $this->Form->end() ?>
         </div>
-
-        <?= $this->Form->end() ?>
-
     </section>
-
 
     <?php if (!empty($jornadaSeleccionada)): ?>
 
-        <!-- RESUMEN JORNADA -->
-        <section class="referee-summary-card">
-
-            <div class="referee-summary-icon">
-                📅
-            </div>
-
-            <div>
-
-                <span>
-                    Jornada seleccionada
-                </span>
-
-                <h3>
-                    <?= h($jornadaSeleccionada->nombre) ?>
-                </h3>
-
+        <section class="matchday">
+            <div class="matchday__date">
                 <?php if (!empty($jornadaSeleccionada->fecha)): ?>
-
-                    <p>
-                        Fecha:
-                        <strong>
-                            <?= h(
-                                $jornadaSeleccionada
-                                    ->fecha
-                                    ->format('d/m/Y')
-                            ) ?>
-                        </strong>
-                    </p>
-
+                    <small><?= $meses[(int)$jornadaSeleccionada->fecha->format('n') - 1] ?> <?= $jornadaSeleccionada->fecha->format('Y') ?></small>
+                    <strong><?= $jornadaSeleccionada->fecha->format('d') ?></strong>
+                <?php else: ?>
+                    <small>Sin fecha</small><strong>–</strong>
                 <?php endif; ?>
-
             </div>
-
+            <div>
+                <h2><?= h($jornadaSeleccionada->nombre) ?></h2>
+                <?php if (!empty($jornadaSeleccionada->fecha)): ?>
+                    <p>Partidos del <?= h($jornadaSeleccionada->fecha->format('d/m/Y')) ?></p>
+                <?php endif; ?>
+            </div>
+            <div class="matchday__stats">
+                <div class="matchday__stat matchday__stat--ok">
+                    <strong><?= $totalJugadores - $totalSuspendidos ?></strong>
+                    <span>habilitados</span>
+                </div>
+                <div class="matchday__stat matchday__stat--ban">
+                    <strong><?= $totalSuspendidos ?></strong>
+                    <span>suspendidos</span>
+                </div>
+            </div>
         </section>
 
-
-        <!-- EQUIPOS -->
         <?php if (!empty($equiposReporte)): ?>
-
-            <div class="referee-teams-list">
-
+            <div class="team-sheets">
                 <?php foreach ($equiposReporte as $equipoNombre => $jugadores): ?>
+                    <section class="panel">
+                        <div class="panel__head">
+                            <div class="who">
+                                <?= $this->element('crest', ['nombre' => $equipoNombre]) ?>
+                                <h2 class="panel__title"><?= h($equipoNombre) ?></h2>
+                            </div>
+                            <span class="count-chip">
+                                <strong><?= count($jugadores) ?></strong>
+                                <?= count($jugadores) === 1 ? 'jugador' : 'jugadores' ?>
+                            </span>
+                        </div>
 
-                    <section class="referee-team-card">
-
-                        <div class="referee-team-header">
-
-                            <div class="referee-team-title">
-
-                                <div class="referee-team-icon">
-                                    🛡️
-                                </div>
-
+                        <?php foreach ($jugadores as $jugador): ?>
+                            <?php
+                            $estaSuspendido = !empty($suspendidos[(int)$jugador->id]);
+                            $nombreCompleto = $jugador->nombres . ' ' . $jugador->apellidos;
+                            ?>
+                            <div class="sheet-row <?= $estaSuspendido ? 'is-banned' : '' ?>">
+                                <?= $this->element('avatar', ['foto' => $jugador->fotografia, 'nombre' => $nombreCompleto]) ?>
                                 <div>
-
-                                    <span>
-                                        Equipo
+                                    <span class="who__name"><?= h($nombreCompleto) ?></span>
+                                    <span class="who__meta">
+                                        Nació el <?= !empty($jugador->fecha_nacimiento) ? h($jugador->fecha_nacimiento->format('d/m/Y')) : 'sin fecha' ?>
                                     </span>
-
-                                    <h3>
-                                        <?= h($equipoNombre) ?>
-                                    </h3>
-
                                 </div>
-
+                                <?php if ($estaSuspendido): ?>
+                                    <span class="tag tag--ban"><?= $this->element('icon', ['name' => 'ban']) ?>Suspendido</span>
+                                <?php else: ?>
+                                    <span class="tag tag--ok"><?= $this->element('icon', ['name' => 'check']) ?>Habilitado</span>
+                                <?php endif; ?>
                             </div>
-
-                            <div class="referee-team-count">
-                                <?= count($jugadores) ?>
-                                <?= count($jugadores) === 1
-                                    ? 'jugador'
-                                    : 'jugadores'
-                                ?>
-                            </div>
-
-                        </div>
-
-
-                        <!-- DESKTOP -->
-                        <div class="referee-desktop-table">
-
-                            <table class="referee-table">
-
-                                <thead>
-                                    <tr>
-                                        <th>Jugador</th>
-                                        <th>Fecha de nacimiento</th>
-                                        <th>Estado</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-
-                                    <?php foreach ($jugadores as $jugador): ?>
-
-                                        <tr>
-
-                                            <!-- JUGADOR -->
-                                            <td>
-
-                                                <div class="referee-player">
-
-                                                    <div class="referee-player-photo">
-
-                                                        <?php if (!empty($jugador->fotografia)): ?>
-
-                                                            <?= $this->Html->image(
-                                                                'jugadores/' .
-                                                                $jugador->fotografia,
-                                                                [
-                                                                    'alt' =>
-                                                                        'Fotografía de ' .
-                                                                        $jugador->nombres
-                                                                ]
-                                                            ) ?>
-
-                                                        <?php else: ?>
-
-                                                            👤
-
-                                                        <?php endif; ?>
-
-                                                    </div>
-
-
-                                                    <div>
-
-                                                        <strong>
-                                                            <?= h(
-                                                                $jugador->nombres .
-                                                                ' ' .
-                                                                $jugador->apellidos
-                                                            ) ?>
-                                                        </strong>
-
-                                                        <span>
-                                                            Jugador #<?= $jugador->id ?>
-                                                        </span>
-
-                                                    </div>
-
-                                                </div>
-
-                                            </td>
-
-
-                                            <!-- NACIMIENTO -->
-                                            <td>
-
-                                                <?php if (!empty($jugador->fecha_nacimiento)): ?>
-
-                                                    <?= h(
-                                                        $jugador
-                                                            ->fecha_nacimiento
-                                                            ->format('d/m/Y')
-                                                    ) ?>
-
-                                                <?php else: ?>
-
-                                                    Sin fecha
-
-                                                <?php endif; ?>
-
-                                            </td>
-
-
-                                            <!-- ESTADO -->
-                                            <td>
-
-                                                <?php
-$estaSuspendido =
-    !empty($suspendidos[(int)$jugador->id]);
-?>
-
-<?php if ($estaSuspendido): ?>
-
-    <span class="referee-status referee-status-suspended">
-        ⛔ Suspendido
-    </span>
-
-<?php else: ?>
-
-    <span class="referee-status referee-status-enabled">
-        ✓ Habilitado
-    </span>
-
-<?php endif; ?>
-
-                                            </td>
-
-                                        </tr>
-
-                                    <?php endforeach; ?>
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-
-                        <!-- MOBILE -->
-                        <div class="referee-mobile-list">
-
-                            <?php foreach ($jugadores as $jugador): ?>
-
-                                <article class="referee-mobile-player">
-
-                                    <div class="referee-mobile-player-top">
-
-                                        <div class="referee-mobile-photo">
-
-                                            <?php if (!empty($jugador->fotografia)): ?>
-
-                                                <?= $this->Html->image(
-                                                    'jugadores/' .
-                                                    $jugador->fotografia,
-                                                    [
-                                                        'alt' =>
-                                                            'Fotografía de ' .
-                                                            $jugador->nombres
-                                                    ]
-                                                ) ?>
-
-                                            <?php else: ?>
-
-                                                👤
-
-                                            <?php endif; ?>
-
-                                        </div>
-
-
-                                        <div class="referee-mobile-name">
-
-                                            <span>
-                                                Jugador #<?= $jugador->id ?>
-                                            </span>
-
-                                            <h3>
-                                                <?= h(
-                                                    $jugador->nombres .
-                                                    ' ' .
-                                                    $jugador->apellidos
-                                                ) ?>
-                                            </h3>
-
-                                            <?php if (!empty($jugador->suspendido)): ?>
-
-                                                <span class="referee-status referee-status-suspended">
-                                                    ⛔ Suspendido
-                                                </span>
-
-                                            <?php else: ?>
-
-                                                <span class="referee-status referee-status-enabled">
-                                                    ✓ Habilitado
-                                                </span>
-
-                                            <?php endif; ?>
-
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="referee-mobile-info">
-
-                                        <span>
-                                            Fecha de nacimiento
-                                        </span>
-
-                                        <strong>
-
-                                            <?php if (!empty($jugador->fecha_nacimiento)): ?>
-
-                                                <?= h(
-                                                    $jugador
-                                                        ->fecha_nacimiento
-                                                        ->format('d/m/Y')
-                                                ) ?>
-
-                                            <?php else: ?>
-
-                                                Sin fecha
-
-                                            <?php endif; ?>
-
-                                        </strong>
-
-                                    </div>
-
-                                </article>
-
-                            <?php endforeach; ?>
-
-                        </div>
-
+                        <?php endforeach; ?>
                     </section>
-
                 <?php endforeach; ?>
-
             </div>
-
         <?php else: ?>
-
-            <div class="profile-empty-state">
-
-                <div>
-                    🧑‍⚖️
+            <section class="panel" style="margin-top:22px">
+                <div class="empty">
+                    <span class="empty__icon"><?= $this->element('icon', ['name' => 'users']) ?></span>
+                    <p class="empty__title">No hay jugadores inscritos</p>
+                    <p class="empty__text">Inscribe jugadores en sus equipos para armar la planilla del árbitro.</p>
                 </div>
-
-                <strong>
-                    Sin jugadores para esta jornada
-                </strong>
-
-                <span>
-                    No se encontraron participantes para mostrar.
-                </span>
-
-            </div>
-
+            </section>
         <?php endif; ?>
 
+    <?php else: ?>
+        <section class="panel" style="margin-top:22px">
+            <div class="empty">
+                <span class="empty__icon"><?= $this->element('icon', ['name' => 'whistle']) ?></span>
+                <p class="empty__title">Elige una jornada</p>
+                <p class="empty__text">Selecciona la jornada arriba y presiona «Consultar jornada» para ver la planilla de cada equipo.</p>
+            </div>
+        </section>
     <?php endif; ?>
 
 </div>

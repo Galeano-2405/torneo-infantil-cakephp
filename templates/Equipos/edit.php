@@ -4,112 +4,39 @@
  * @var \App\Model\Entity\Equipo $equipo
  */
 ?>
+<div class="reveal">
 
-<div class="form-page">
+    <?= $this->element('page_head', [
+        'title' => 'Editar equipo',
+        'lead' => 'Cambia el nombre del equipo. Los jugadores asignados se conservan.',
+        'icon' => 'edit',
+    ]) ?>
 
-    <div class="form-header">
-
-        <div>
-
-            <div class="form-kicker">
-                Actualización de equipo
-            </div>
-
-            <h1>
-                Editar equipo
-            </h1>
-
-            <p>
-                Modifica la información registrada del equipo.
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div class="form-card">
-
-        <div class="form-card-top">
-
-            <h3>
-                Datos del equipo
-            </h3>
-
-            <p>
-                Actualiza únicamente los campos que necesites modificar.
-            </p>
-
-        </div>
-
-
+    <section class="panel form-panel">
         <?= $this->Form->create($equipo) ?>
-
-
-        <div class="form-card-body">
-
-            <div class="form-grid">
-
-                <div class="form-group full-width">
-
-                    <?= $this->Form->control(
-                        'nombre',
-                        [
-                            'label' => 'Nombre del equipo'
-                        ]
-                    ) ?>
-
+            <div class="form-section">
+                <div>
+                    <h2 class="form-section__title">Datos del equipo</h2>
+                    <p class="form-section__text">Equipo #<?= $equipo->id ?></p>
                 </div>
-
+                <div class="form-grid">
+                    <div class="field span-2">
+                        <?= $this->Form->control('nombre', [
+                            'label' => 'Nombre del equipo',
+                        ]) ?>
+                    </div>
+                </div>
             </div>
 
-        </div>
-
-
-        <div class="form-card-footer">
-
-            <?= $this->Html->link(
-                '← Volver a equipos',
-                [
-                    'action' => 'index'
-                ],
-                [
-                    'class' => 'form-secondary-button'
-                ]
-            ) ?>
-
-
-            <div class="form-actions">
-
-                <?= $this->Form->postLink(
-                    'Eliminar',
-                    [
-                        'action' => 'delete',
-                        $equipo->id
-                    ],
-                    [
-                        'confirm' =>
-                            '¿Está seguro de eliminar este equipo?',
-                        'class' =>
-                            'form-danger-button'
-                    ]
-                ) ?>
-
-
-                <?= $this->Form->button(
-                    'Guardar cambios',
-                    [
-                        'class' => 'button'
-                    ]
-                ) ?>
-
-            </div>
-
-        </div>
-
-
+            <?= $this->element('form_bar', ['volver' => 'Volver a equipos', 'guardar' => 'Guardar cambios']) ?>
         <?= $this->Form->end() ?>
+    </section>
 
-    </div>
+    <?= $this->element('danger_zone', [
+        'id' => $equipo->id,
+        'que' => 'este equipo',
+        'confirm' => '¿Eliminar el equipo ' . $equipo->nombre . '?',
+        'nota' => 'Solo se puede eliminar si ya no tiene jugadores asignados.',
+    ]) ?>
 
 </div>

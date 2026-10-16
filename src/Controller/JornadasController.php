@@ -47,11 +47,11 @@ class JornadasController extends AppController
         if ($this->request->is('post')) {
             $jornada = $this->Jornadas->patchEntity($jornada, $this->request->getData());
             if ($this->Jornadas->save($jornada)) {
-                $this->Flash->success(__('The jornada has been saved.'));
+                $this->Flash->success(__('Jornada guardada correctamente.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The jornada could not be saved. Please, try again.'));
+            $this->Flash->error(__('No se pudo guardar la jornada. Revisa los datos e intenta de nuevo.'));
         }
         $this->set(compact('jornada'));
     }
@@ -69,11 +69,11 @@ class JornadasController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $jornada = $this->Jornadas->patchEntity($jornada, $this->request->getData());
             if ($this->Jornadas->save($jornada)) {
-                $this->Flash->success(__('The jornada has been saved.'));
+                $this->Flash->success(__('Jornada guardada correctamente.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The jornada could not be saved. Please, try again.'));
+            $this->Flash->error(__('No se pudo guardar la jornada. Revisa los datos e intenta de nuevo.'));
         }
         $this->set(compact('jornada'));
     }
@@ -90,9 +90,9 @@ class JornadasController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $jornada = $this->Jornadas->get($id);
         if ($this->Jornadas->delete($jornada)) {
-            $this->Flash->success(__('The jornada has been deleted.'));
+            $this->Flash->success(__('Jornada eliminada correctamente.'));
         } else {
-            $this->Flash->error(__('The jornada could not be deleted. Please, try again.'));
+            $this->Flash->error(__('No se pudo eliminar la jornada. Verifica que no tenga goles registrados.'));
         }
 
         return $this->redirect(['action' => 'index']);

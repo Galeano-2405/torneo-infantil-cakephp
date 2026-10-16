@@ -6,141 +6,56 @@
  * @var string[]|\Cake\Collection\CollectionInterface $jornadas
  */
 ?>
+<div class="reveal">
 
-<div class="form-page">
+    <?= $this->element('page_head', [
+        'title' => 'Editar goles',
+        'lead' => 'Corrige el jugador, la jornada o la cantidad de goles.',
+        'icon' => 'edit',
+        'tone' => 'gold',
+    ]) ?>
 
-    <div class="form-header">
-
-        <div>
-
-            <div class="form-kicker">
-                Actualización de anotaciones
-            </div>
-
-            <h1>
-                Editar goles
-            </h1>
-
-            <p>
-                Modifica la información registrada para esta anotación.
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div class="form-card">
-
-        <div class="form-card-top">
-
-            <h3>
-                Datos de anotación
-            </h3>
-
-            <p>
-                Actualiza únicamente los campos necesarios.
-            </p>
-
-        </div>
-
-
+    <section class="panel form-panel">
         <?= $this->Form->create($gole) ?>
-
-
-        <div class="form-card-body">
-
-            <div class="form-grid">
-
-                <div class="form-group">
-
-                    <?= $this->Form->control(
-                        'jugador_id',
-                        [
+            <div class="form-section">
+                <div>
+                    <h2 class="form-section__title">Anotación</h2>
+                    <p class="form-section__text">Registro #<?= $gole->id ?></p>
+                </div>
+                <div class="form-grid">
+                    <div class="field">
+                        <?= $this->Form->control('jugador_id', [
                             'label' => 'Jugador',
-                            'options' => $jugadors
-                        ]
-                    ) ?>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <?= $this->Form->control(
-                        'jornada_id',
-                        [
+                            'options' => $jugadors,
+                        ]) ?>
+                    </div>
+                    <div class="field">
+                        <?= $this->Form->control('jornada_id', [
                             'label' => 'Jornada',
-                            'options' => $jornadas
-                        ]
-                    ) ?>
-
-                </div>
-
-
-                <div class="form-group full-width">
-
-                    <?= $this->Form->control(
-                        'cantidad',
-                        [
+                            'options' => $jornadas,
+                        ]) ?>
+                    </div>
+                    <div class="field">
+                        <?= $this->Form->control('cantidad', [
                             'label' => 'Cantidad de goles',
                             'type' => 'number',
                             'min' => 0,
-                            'step' => 1
-                        ]
-                    ) ?>
-
+                            'step' => 1,
+                            'inputmode' => 'numeric',
+                        ]) ?>
+                    </div>
                 </div>
-
             </div>
 
-        </div>
-
-
-        <div class="form-card-footer">
-
-            <?= $this->Html->link(
-                '← Volver a goles',
-                [
-                    'action' => 'index'
-                ],
-                [
-                    'class' => 'form-secondary-button'
-                ]
-            ) ?>
-
-
-            <div class="form-actions">
-
-                <?= $this->Form->postLink(
-                    'Eliminar',
-                    [
-                        'action' => 'delete',
-                        $gole->id
-                    ],
-                    [
-                        'confirm' =>
-                            '¿Está seguro de eliminar este registro de goles?',
-                        'class' =>
-                            'form-danger-button'
-                    ]
-                ) ?>
-
-
-                <?= $this->Form->button(
-                    'Guardar cambios',
-                    [
-                        'class' => 'button'
-                    ]
-                ) ?>
-
-            </div>
-
-        </div>
-
-
+            <?= $this->element('form_bar', ['volver' => 'Volver a goles', 'guardar' => 'Guardar cambios']) ?>
         <?= $this->Form->end() ?>
+    </section>
 
-    </div>
+    <?= $this->element('danger_zone', [
+        'id' => $gole->id,
+        'que' => 'este registro',
+        'confirm' => '¿Eliminar este registro de goles?',
+        'nota' => 'Los goles se restan de la tabla de goleadores.',
+    ]) ?>
 
 </div>

@@ -47,11 +47,11 @@ class EquiposController extends AppController
         if ($this->request->is('post')) {
             $equipo = $this->Equipos->patchEntity($equipo, $this->request->getData());
             if ($this->Equipos->save($equipo)) {
-                $this->Flash->success(__('The equipo has been saved.'));
+                $this->Flash->success(__('Equipo guardado correctamente.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The equipo could not be saved. Please, try again.'));
+            $this->Flash->error(__('No se pudo guardar el equipo. Revisa los datos e intenta de nuevo.'));
         }
         $this->set(compact('equipo'));
     }
@@ -69,11 +69,11 @@ class EquiposController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $equipo = $this->Equipos->patchEntity($equipo, $this->request->getData());
             if ($this->Equipos->save($equipo)) {
-                $this->Flash->success(__('The equipo has been saved.'));
+                $this->Flash->success(__('Equipo guardado correctamente.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The equipo could not be saved. Please, try again.'));
+            $this->Flash->error(__('No se pudo guardar el equipo. Revisa los datos e intenta de nuevo.'));
         }
         $this->set(compact('equipo'));
     }
@@ -90,9 +90,9 @@ class EquiposController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $equipo = $this->Equipos->get($id);
         if ($this->Equipos->delete($equipo)) {
-            $this->Flash->success(__('The equipo has been deleted.'));
+            $this->Flash->success(__('Equipo eliminado correctamente.'));
         } else {
-            $this->Flash->error(__('The equipo could not be deleted. Please, try again.'));
+            $this->Flash->error(__('No se pudo eliminar el equipo. Verifica que no tenga jugadores asignados.'));
         }
 
         return $this->redirect(['action' => 'index']);

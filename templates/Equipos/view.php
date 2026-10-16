@@ -3,80 +3,126 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Equipo $equipo
  */
+$totalJugadores = count($equipo->jugadores ?? []);
 ?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('Edit Equipo'), ['action' => 'edit', $equipo->id], ['class' => 'side-nav-item']) ?>
-            <?= $this->Form->postLink(__('Delete Equipo'), ['action' => 'delete', $equipo->id], ['confirm' => __('Are you sure you want to delete # {0}?', $equipo->id), 'class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('List Equipos'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('New Equipo'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
-        </div>
-    </aside>
-    <div class="column column-80">
-        <div class="equipos view content">
-            <h3><?= h($equipo->nombre) ?></h3>
-            <table>
-                <tr>
-                    <th><?= __('Nombre') ?></th>
-                    <td><?= h($equipo->nombre) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Id') ?></th>
-                    <td><?= $this->Number->format($equipo->id) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Created') ?></th>
-                    <td><?= h($equipo->created) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Modified') ?></th>
-                    <td><?= h($equipo->modified) ?></td>
-                </tr>
-            </table>
-            <div class="related">
-                <h4><?= __('Related Jugadores') ?></h4>
-                <?php if (!empty($equipo->jugadores)) : ?>
-                <div class="table-responsive">
-                    <table>
-                        <tr>
-                            <th><?= __('Id') ?></th>
-                            <th><?= __('Nombres') ?></th>
-                            <th><?= __('Apellidos') ?></th>
-                            <th><?= __('Fecha Nacimiento') ?></th>
-                            <th><?= __('Fotografia') ?></th>
-                            <th><?= __('Created') ?></th>
-                            <th><?= __('Modified') ?></th>
-                            <th class="actions"><?= __('Actions') ?></th>
-                        </tr>
-                        <?php foreach ($equipo->jugadores as $jugadore) : ?>
-                        <tr>
-                            <td><?= h($jugadore->id) ?></td>
-                            <td><?= h($jugadore->nombres) ?></td>
-                            <td><?= h($jugadore->apellidos) ?></td>
-                            <td><?= h($jugadore->fecha_nacimiento) ?></td>
-                            <td><?= h($jugadore->fotografia) ?></td>
-                            <td><?= h($jugadore->created) ?></td>
-                            <td><?= h($jugadore->modified) ?></td>
-                            <td class="actions">
-                                <?= $this->Html->link(__('View'), ['controller' => 'Jugadores', 'action' => 'view', $jugadore->id]) ?>
-                                <?= $this->Html->link(__('Edit'), ['controller' => 'Jugadores', 'action' => 'edit', $jugadore->id]) ?>
-                                <?= $this->Form->postLink(
-                                    __('Delete'),
-                                    ['controller' => 'Jugadores', 'action' => 'delete', $jugadore->id],
-                                    [
-                                        'method' => 'delete',
-                                        'confirm' => __('Are you sure you want to delete # {0}?', $jugadore->id),
-                                    ]
-                                ) ?>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </table>
-                </div>
+<div class="reveal">
+
+    <?= $this->element('page_head', [
+        'title' => 'Ficha del equipo',
+        'icon' => 'shield',
+        'actions' =>
+            $this->Html->link(
+                $this->element('icon', ['name' => 'arrow-left']) . 'Equipos',
+                ['action' => 'index'],
+                ['class' => 'btn btn--ghost', 'escape' => false]
+            ) .
+            $this->Html->link(
+                $this->element('icon', ['name' => 'edit']) . 'Editar',
+                ['action' => 'edit', $equipo->id],
+                ['class' => 'btn btn--primary', 'escape' => false]
+            ),
+    ]) ?>
+
+    <section class="detail-hero">
+        <svg class="detail-hero__pitch" viewBox="0 0 400 300" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="200" cy="150" r="90"/><path d="M200 0v300"/><circle cx="200" cy="150" r="5" fill="currentColor"/>
+        </svg>
+        <span style="color:#fff"><?= $this->element('crest', ['nombre' => $equipo->nombre, 'size' => 'lg']) ?></span>
+        <div>
+            <h2 class="detail-hero__title"><?= h($equipo->nombre) ?></h2>
+            <div class="detail-hero__meta">
+                <span class="tag">Equipo #<?= $equipo->id ?></span>
+                <?php if (!empty($equipo->created)): ?>
+                    <span class="tag">Inscrito el <?= h($equipo->created->format('d/m/Y')) ?></span>
                 <?php endif; ?>
             </div>
         </div>
+        <div class="scorebox">
+            <span class="scorebox__value"><?= $totalJugadores ?></span>
+            <span class="scorebox__label"><?= $totalJugadores === 1 ? 'jugador' : 'jugadores' ?></span>
+        </div>
+    </section>
+
+    <section class="panel" style="margin-top:22px">
+        <div class="panel__head">
+            <h2 class="panel__title"><?= $this->element('icon', ['name' => 'users']) ?>Plantilla del equipo</h2>
+            <?= $this->Html->link(
+                $this->element('icon', ['name' => 'plus']) . 'Inscribir jugador',
+                ['controller' => 'Jugadores', 'action' => 'add'],
+                ['class' => 'btn btn--ghost btn--sm', 'escape' => false]
+            ) ?>
+        </div>
+
+        <?php if (!empty($equipo->jugadores)): ?>
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Jugador</th>
+                            <th>Fecha de nacimiento</th>
+                            <th>Inscrito el</th>
+                            <th class="is-right">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($equipo->jugadores as $jugadore): ?>
+                            <?php $nombreCompleto = $jugadore->nombres . ' ' . $jugadore->apellidos; ?>
+                            <tr>
+                                <td class="cell-main" data-label="Jugador">
+                                    <div class="who">
+                                        <?= $this->element('avatar', ['foto' => $jugadore->fotografia, 'nombre' => $nombreCompleto]) ?>
+                                        <div>
+                                            <?= $this->Html->link(
+                                                h($nombreCompleto),
+                                                ['controller' => 'Jugadores', 'action' => 'view', $jugadore->id],
+                                                ['class' => 'who__name', 'escape' => false]
+                                            ) ?>
+                                            <span class="who__meta">Jugador #<?= $jugadore->id ?></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-label="Nacimiento">
+                                    <?= !empty($jugadore->fecha_nacimiento) ? h($jugadore->fecha_nacimiento->format('d/m/Y')) : '<span class="muted">Sin fecha</span>' ?>
+                                </td>
+                                <td data-label="Inscrito el">
+                                    <?= !empty($jugadore->created) ? h($jugadore->created->format('d/m/Y')) : '<span class="muted">Sin fecha</span>' ?>
+                                </td>
+                                <td class="cell-actions is-right">
+                                    <?= $this->element('row_actions', [
+                                        'id' => $jugadore->id,
+                                        'controller' => 'Jugadores',
+                                        'confirm' => '¿Eliminar a ' . $jugadore->nombres . '?',
+                                    ]) ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php else: ?>
+            <div class="empty">
+                <span class="empty__icon"><?= $this->element('icon', ['name' => 'users']) ?></span>
+                <p class="empty__title">Este equipo no tiene jugadores</p>
+                <p class="empty__text">Inscribe un jugador y elige este equipo en el formulario.</p>
+            </div>
+        <?php endif; ?>
+    </section>
+
+    <div class="bottom-actions">
+        <?= $this->Html->link(
+            $this->element('icon', ['name' => 'arrow-left']) . 'Volver a equipos',
+            ['action' => 'index'],
+            ['class' => 'btn btn--ghost', 'escape' => false]
+        ) ?>
+        <?= $this->Form->postLink(
+            $this->element('icon', ['name' => 'trash']) . 'Eliminar equipo',
+            ['action' => 'delete', $equipo->id],
+            [
+                'confirm' => '¿Eliminar el equipo ' . $equipo->nombre . '?',
+                'class' => 'btn btn--danger',
+                'escape' => false,
+            ]
+        ) ?>
     </div>
+
 </div>

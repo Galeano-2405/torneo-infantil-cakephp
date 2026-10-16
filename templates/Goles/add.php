@@ -6,133 +6,53 @@
  * @var \Cake\Collection\CollectionInterface|string[] $jornadas
  */
 ?>
+<div class="reveal">
 
-<div class="form-page">
+    <?= $this->element('page_head', [
+        'title' => 'Registrar goles',
+        'lead' => 'Anota cuántos goles hizo un jugador en una jornada.',
+        'icon' => 'ball',
+        'tone' => 'gold',
+    ]) ?>
 
-    <div class="form-header">
-
-        <div>
-
-            <div class="form-kicker">
-                Registro de anotaciones
-            </div>
-
-            <h1>
-                Registrar goles
-            </h1>
-
-            <p>
-                Registra la cantidad de goles anotados por un jugador en una jornada.
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div class="form-card">
-
-        <div class="form-card-top">
-
-            <h3>
-                Información de anotación
-            </h3>
-
-            <p>
-                Selecciona jugador, jornada y cantidad de goles.
-            </p>
-
-        </div>
-
-
+    <section class="panel form-panel">
         <?= $this->Form->create($gole) ?>
-
-
-        <div class="form-card-body">
-
-            <div class="form-grid">
-
-                <div class="form-group">
-
-                    <?= $this->Form->control(
-                        'jugador_id',
-                        [
+            <div class="form-section">
+                <div>
+                    <h2 class="form-section__title">Anotación</h2>
+                    <p class="form-section__text">Estos goles se suman automáticamente a la tabla de goleadores.</p>
+                </div>
+                <div class="form-grid">
+                    <div class="field">
+                        <?= $this->Form->control('jugador_id', [
                             'label' => 'Jugador',
                             'options' => $jugadors,
-                            'empty' => 'Seleccione un jugador'
-                        ]
-                    ) ?>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <?= $this->Form->control(
-                        'jornada_id',
-                        [
+                            'empty' => 'Selecciona un jugador',
+                        ]) ?>
+                    </div>
+                    <div class="field">
+                        <?= $this->Form->control('jornada_id', [
                             'label' => 'Jornada',
                             'options' => $jornadas,
-                            'empty' => 'Seleccione una jornada'
-                        ]
-                    ) ?>
-
-                </div>
-
-
-                <div class="form-group full-width">
-
-                    <?= $this->Form->control(
-                        'cantidad',
-                        [
+                            'empty' => 'Selecciona una jornada',
+                        ]) ?>
+                    </div>
+                    <div class="field">
+                        <?= $this->Form->control('cantidad', [
                             'label' => 'Cantidad de goles',
                             'type' => 'number',
                             'min' => 0,
                             'step' => 1,
-                            'placeholder' => 'Ejemplo: 2'
-                        ]
-                    ) ?>
-
-                    <span class="form-help">
-                        Ingresa únicamente números enteros iguales o mayores a 0.
-                    </span>
-
+                            'placeholder' => 'Ejemplo: 2',
+                            'inputmode' => 'numeric',
+                        ]) ?>
+                        <p class="hint">Solo números enteros, desde 0.</p>
+                    </div>
                 </div>
-
             </div>
 
-        </div>
-
-
-        <div class="form-card-footer">
-
-            <?= $this->Html->link(
-                '← Volver a goles',
-                [
-                    'action' => 'index'
-                ],
-                [
-                    'class' => 'form-secondary-button'
-                ]
-            ) ?>
-
-
-            <div class="form-actions">
-
-                <?= $this->Form->button(
-                    'Guardar goles',
-                    [
-                        'class' => 'button'
-                    ]
-                ) ?>
-
-            </div>
-
-        </div>
-
-
+            <?= $this->element('form_bar', ['volver' => 'Volver a goles', 'guardar' => 'Guardar goles']) ?>
         <?= $this->Form->end() ?>
-
-    </div>
+    </section>
 
 </div>

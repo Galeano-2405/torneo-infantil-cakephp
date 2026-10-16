@@ -4,114 +4,40 @@
  * @var \App\Model\Entity\Jornada $jornada
  */
 ?>
+<div class="reveal">
 
-<div class="form-page">
+    <?= $this->element('page_head', [
+        'title' => 'Nueva jornada',
+        'lead' => 'Programa una fecha del campeonato.',
+        'icon' => 'calendar',
+        'tone' => 'turf',
+    ]) ?>
 
-    <div class="form-header">
-
-        <div>
-
-            <div class="form-kicker">
-                Planificación del torneo
-            </div>
-
-            <h1>
-                Nueva jornada
-            </h1>
-
-            <p>
-                Registra una nueva jornada y define la fecha programada.
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div class="form-card">
-
-        <div class="form-card-top">
-
-            <h3>
-                Información de la jornada
-            </h3>
-
-            <p>
-                Completa los datos necesarios para crear la jornada.
-            </p>
-
-        </div>
-
-
+    <section class="panel form-panel">
         <?= $this->Form->create($jornada) ?>
-
-
-        <div class="form-card-body">
-
-            <div class="form-grid">
-
-                <div class="form-group">
-
-                    <?= $this->Form->control(
-                        'nombre',
-                        [
+            <div class="form-section">
+                <div>
+                    <h2 class="form-section__title">Datos de la jornada</h2>
+                    <p class="form-section__text">La fecha define qué jugadores quedan suspendidos en el reporte para árbitro.</p>
+                </div>
+                <div class="form-grid">
+                    <div class="field">
+                        <?= $this->Form->control('nombre', [
                             'label' => 'Nombre de la jornada',
-                            'placeholder' => 'Ejemplo: Jornada 1'
-                        ]
-                    ) ?>
-
+                            'placeholder' => 'Ejemplo: Jornada 1',
+                            'autofocus' => true,
+                        ]) ?>
+                    </div>
+                    <div class="field">
+                        <?= $this->Form->control('fecha', [
+                            'label' => 'Fecha del partido',
+                        ]) ?>
+                    </div>
                 </div>
-
-
-                <div class="form-group">
-
-                    <?= $this->Form->control(
-                        'fecha',
-                        [
-                            'label' => 'Fecha de la jornada'
-                        ]
-                    ) ?>
-
-                    <span class="form-help">
-                        Selecciona la fecha programada para esta jornada.
-                    </span>
-
-                </div>
-
             </div>
 
-        </div>
-
-
-        <div class="form-card-footer">
-
-            <?= $this->Html->link(
-                '← Volver a jornadas',
-                [
-                    'action' => 'index'
-                ],
-                [
-                    'class' => 'form-secondary-button'
-                ]
-            ) ?>
-
-
-            <div class="form-actions">
-
-                <?= $this->Form->button(
-                    'Guardar jornada',
-                    [
-                        'class' => 'button'
-                    ]
-                ) ?>
-
-            </div>
-
-        </div>
-
-
+            <?= $this->element('form_bar', ['volver' => 'Volver a jornadas', 'guardar' => 'Guardar jornada']) ?>
         <?= $this->Form->end() ?>
-
-    </div>
+    </section>
 
 </div>
